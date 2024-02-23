@@ -1,12 +1,11 @@
 # services
 Overview of all OpenML components including a docker-compose to run OpenML services locally
 
+## Overview
+
+![OpenML Component overview](./documentation/OpenML-overview.png)
 
 
-TODO: 
-- add documentation: overview of all the components
-- add evaluation engine
-- add issues to describe shortcomings (url of minio)
 
 
 ## Prerequisites
@@ -34,6 +33,8 @@ docker compose --profile frontend -d  # Frontend, rest-api, elasticsearch and da
 ```
 Use the same profile for your `down` command.
 
+## Known issues
+See the Github Issue list for the known issues.
 
 ## Debugging
 Some usefull commands:
