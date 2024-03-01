@@ -74,6 +74,9 @@ services:
     container_name: "openml-frontend"
     ports:
       - "5000:5000"
+    depends_on:
+      php-api:
+        condition: service_healthy
 
   minio:
     profiles: ["all", "minio"]
