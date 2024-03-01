@@ -5,6 +5,7 @@ COPY run-cron.sh /run-cron.sh
 COPY generate_croissants.sh /generate_croissants.sh
 
 USER root
+RUN apt update && apt upgrade -y
 RUN apt -y install cron
 RUN chmod +x /etc/cron.d/openml
 
