@@ -24,14 +24,24 @@ Stop it again using
 docker compose --profile all down
 ```
 
+### Profiles
+You can use different profiles:
 
-You can use different profiles, for example:
+- `[no profile]`: databases
+- `"elasticsearch"`: databases + elasticsearch
+- `"rest-api"`: databases + elasticsearch + REST API
+- `"frontend"`: databases + elasticsearch + REST API + frontend
+- `"minio"`: database + elasticsearch + REST APP + MinIO + parquet and croissant conversion
+- `"all"`: everything
+
+Usage examples:
 ```bash
 docker compose --profile all up -d    # all services
 docker compose up -d                  # only the database
 docker compose --profile frontend up -d  # Frontend, rest-api, elasticsearch and database
 ```
 Use the same profile for your `down` command.
+
 
 ## Known issues
 See the Github Issue list for the known issues.
