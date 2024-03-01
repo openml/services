@@ -29,7 +29,7 @@ You can use different profiles, for example:
 ```bash
 docker compose --profile all up -d    # all services
 docker compose up -d                  # only the database
-docker compose --profile frontend -d  # Frontend, rest-api, elasticsearch and database
+docker compose --profile frontend up -d  # Frontend, rest-api, elasticsearch and database
 ```
 Use the same profile for your `down` command.
 
