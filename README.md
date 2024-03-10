@@ -30,7 +30,7 @@ You can use different profiles:
 - `[no profile]`: databases
 - `"elasticsearch"`: databases + elasticsearch
 - `"rest-api"`: databases + elasticsearch + REST API
-- `"frontend"`: databases + elasticsearch + REST API + frontend
+- `"frontend"`: databases + elasticsearch + REST API + frontend + email-server
 - `"minio"`: database + elasticsearch + REST APP + MinIO + parquet and croissant conversion
 - `"all"`: everything
 
@@ -65,6 +65,11 @@ When you spin up the docker-compose, you'll get these endpoints:
 ## Credentials
 The credentials for the database can be found in `config/database/.env`, for minio in `config/minio/.env`, etc.
 
+## Emails
+The email-server is used for emails from the frontend. For example, if you create a new user, an 
+email is send to the user. All outgoing emails are rerouted to catchall@example.com. You can see 
+the messages in `config/email-server/messages`. Note that some of the urls in the emails need to 
+be slightly altered to use them in the test setup: change https to http.
 
 ## Development
 
@@ -94,7 +99,10 @@ CROISSANT_APP=/app                                   # Always set this to /app. 
 ```
 
 ### Frontend
-For the frontend, the easiest way of development is probably just to spin up a local development instance outside of docker, and configure it so that it points towards the endpoints of this docker-compose. Run docker compose with profile `rest-api`.
+```bash
+FRONTEND_CODE_DIR=/path/to/openml.org        # Python directory of https://github.com/openml/openml.org on your computer
+FRONTEND_APP=/app                            # Always set this to /app. Leave empty if you leave FRONTEND_CODE_DIR empty
+```
 
 ### Other services
 If you want to develop a service that depends on any of the services in this docker-compose, just bring up this docker-compose and point your service to the correct endpoints.

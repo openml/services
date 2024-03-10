@@ -68,12 +68,28 @@ services:
       timeout: 3s
       interval: 1m
 
+  email-server:
+    profiles: ["all", "frontend"]
+    image: foxcpp/maddy:latest
+    container_name: "email-server"
+    ports:
+      - "25:25"
+      - "143:143"
+      - "587:587"
+      - "993:993"
+    env_file: config/email-server/.env
+    volumes:
+      - ./config/email-server/:/data
+
   frontend:
     profiles: ["all", "frontend"]
     image: openml/frontend:dev
     container_name: "openml-frontend"
     ports:
       - "5000:5000"
+    env_file: config/frontend/.env
+    volumes:
+      - ${FRONTEND_CODE_DIR:-.config/emptydir}:${FRONTEND_APP:-/tmp/unused}
     depends_on:
       php-api:
         condition: service_healthy
