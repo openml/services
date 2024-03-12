@@ -1,0 +1,136 @@
+services:
+  database:
+    image: "openml/test-database"
+    container_name: "openml-test-database"
+    environment:
+      MYSQL_ROOT_PASSWORD: ok
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      start_period: 30s
+      start_interval: 1s
+      timeout: 3s
+      interval: 5s
+      retries: 10
+
+  database-setup:
+    image: mysql
+    container_name: "openml-test-database-setup"
+    volumes:
+      - ./config/database/update.sh:/database-update.sh
+    command: /bin/sh -c "/database-update.sh"
+    depends_on:
+      database:
+        condition: service_healthy
+
+  elasticsearch:
+    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch"]
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23
+    container_name: "openml-elasticsearch"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    env_file: config/elasticsearch/.env
+    healthcheck:
+      test: curl 127.0.0.1:9200/_cluster/health | grep -e "green"
+      start_period: 30s
+      start_interval: 5s
+      timeout: 3s
+      interval: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.2'
+          memory: 250M
+
+  php-api:
+    profiles: ["all", "minio", "rest-api", "frontend"]
+    image: openml/php-rest-api
+    container_name: "openml-php-rest-api"
+    ports:
+      - "8080:80"
+    env_file: config/php/.env
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      database-setup:
+        condition: service_completed_successfully
+    volumes:
+      - ${PHP_CODE_DIR:-./config/emptydir}:${PHP_CODE_VAR_WWW_OPENML:-/tmp/unused}
+    healthcheck:
+      test: curl 127.0.0.1:80/api/v1/json/data/1 | grep -e "data_set_description"
+      start_period: 30s
+      start_interval: 5s
+      timeout: 3s
+      interval: 1m
+
+  email-server:
+    profiles: ["all", "frontend"]
+    image: foxcpp/maddy:latest
+    container_name: "email-server"
+    ports:
+      - "25:25"
+      - "143:143"
+      - "587:587"
+      - "993:993"
+    env_file: config/email-server/.env
+    volumes:
+      - ./config/email-server/:/data
+
+  frontend:
+    profiles: ["all", "frontend"]
+    image: openml/frontend:dev
+    container_name: "openml-frontend"
+    ports:
+      - "5000:5000"
+    env_file: config/frontend/.env
+    volumes:
+      - ${FRONTEND_CODE_DIR:-.config/emptydir}:${FRONTEND_APP:-/tmp/unused}
+    depends_on:
+      php-api:
+        condition: service_healthy
+
+  minio:
+    profiles: ["all", "minio"]
+    image: openml/test-minio
+    container_name: "openml-minio"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    env_file: config/minio/.env
+    command: >
+      server /export --console-address ":9001"
+
+  arff-to-pq:
+    profiles: ["all", "minio"]
+    build:
+      context: config/arff-to-pq-converter
+    image: openml-arff-to-pq-converter-cron
+    container_name: "openml-arff-to-pq-converter"
+    env_file: config/arff-to-pq-converter/.env
+    entrypoint: >
+      /bin/bash -c "/run-cron.sh"
+    volumes:
+      - ${ARFF_TO_PQ_CODE_DIR:-./config/emptydir}:${ARFF_TO_PQ_APP:-/tmp/unused}
+    depends_on:
+      php-api:
+        condition: service_healthy
+
+  croissants:
+    profiles: ["all", "minio"]
+    build:
+      context: config/croissant-converter
+    image: openml-croissant-converter-cron
+    container_name: "openml-croissant-converter"
+    env_file: config/croissant-converter/.env
+    entrypoint: >
+      /bin/bash -c "/run-cron.sh"
+    volumes:
+      - ${CROISSANT_CODE_DIR:-./config/emptydir}:${CROISSANT_APP:-/tmp/unused}
+    depends_on:
+      php-api:
+        condition: service_healthy
