@@ -5,9 +5,6 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 
 ![OpenML Component overview](./documentation/OpenML-overview.png)
 
-
-
-
 ## Prerequisites
 - Linux/MacOS/Windows (should all work)
 - [Docker](https://docs.docker.com/get-docker/) 
@@ -36,8 +33,8 @@ You can use different profiles:
 
 Usage examples:
 ```bash
-docker compose --profile all up -d    # all services
-docker compose up -d                  # only the database
+docker compose --profile all up -d       # all services
+docker compose up -d                     # only the database
 docker compose --profile frontend up -d  # Frontend, rest-api, elasticsearch and database
 ```
 Use the same profile for your `down` command.
@@ -55,6 +52,9 @@ docker exec -it openml-php-rest-api /bin/bash   # go into the php rest api conta
 ```
 
 ## Endpoints
+> [!TIP]
+> If you change any port, make sure to change it for all services! The elasticsearch config, for instance, needs to know the port of the frontend (for CORS).
+
 When you spin up the docker-compose, you'll get these endpoints:
 - *Frontend*: localhost:5000
 - *Database*: localhost:3306, filled with test data.
