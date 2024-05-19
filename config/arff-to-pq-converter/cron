@@ -1,0 +1,1 @@
+* * * * * /usr/local/bin/python /app/main.py --latest >> /home/unprivileged-user/cron.log 2>&1
