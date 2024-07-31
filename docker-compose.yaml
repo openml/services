@@ -116,6 +116,7 @@ services:
       /bin/bash -c "/run-cron.sh"
     volumes:
       - ${ARFF_TO_PQ_CODE_DIR:-./config/emptydir}:${ARFF_TO_PQ_APP:-/tmp/unused}
+      - ./logs/arff-to-pq-converter:/home/unprivileged-user/logs
     depends_on:
       php-api:
         condition: service_healthy
@@ -131,6 +132,7 @@ services:
       /bin/bash -c "/run-cron.sh"
     volumes:
       - ${CROISSANT_CODE_DIR:-./config/emptydir}:${CROISSANT_APP:-/tmp/unused}
+      - ./logs/croissants-converter:/home/unprivileged-user/logs
     depends_on:
       php-api:
         condition: service_healthy
