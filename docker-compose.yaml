@@ -25,7 +25,7 @@ services:
         condition: service_healthy
 
   elasticsearch:
-    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch"]
+    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23
     container_name: "openml-elasticsearch"
     ports:
@@ -48,7 +48,7 @@ services:
           memory: 250M
 
   php-api:
-    profiles: ["all", "minio", "rest-api", "frontend"]
+    profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
     image: openml/php-rest-api
     container_name: "openml-php-rest-api"
     ports:
@@ -95,7 +95,7 @@ services:
         condition: service_healthy
 
   minio:
-    profiles: ["all", "minio"]
+    profiles: ["all", "minio", "evaluation-engine"]
     image: openml/test-minio
     container_name: "openml-minio"
     ports:
@@ -131,6 +131,20 @@ services:
       /bin/bash -c "/run-cron.sh"
     volumes:
       - ${CROISSANT_CODE_DIR:-./config/emptydir}:${CROISSANT_APP:-/tmp/unused}
+    depends_on:
+      php-api:
+        condition: service_healthy
+
+  evaluation-engine:
+    profiles: ["all", "evaluation-engine"]
+    build:
+      context: config/evaluation-engine
+    container_name: openml-evaluation-engine
+    entrypoint: >
+      /bin/bash -c "/run-cron.sh"
+    env_file: config/evaluation-engine/.env
+    volumes:
+      - ./logs/evaluation-engine:/home/unprivileged-user/logs
     depends_on:
       php-api:
         condition: service_healthy
