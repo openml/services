@@ -1,4 +1,4 @@
-from openml/croissant-converter
+from openml/croissant-converter:1.1.20240628
 
 COPY cron /etc/cron.d/openml
 COPY run-cron.sh /run-cron.sh

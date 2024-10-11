@@ -29,7 +29,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23
     container_name: "openml-elasticsearch"
     ports:
-      - "9200:9200"
+      - "9200:9200"  # also known as /es (nginx)
       - "9300:9300"
     env_file: config/elasticsearch/.env
     healthcheck:
@@ -47,12 +47,20 @@ services:
           cpus: '0.2'
           memory: 250M
 
+  nginx:
+    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
+    build:
+      context: config/nginx
+    container_name: openml-nginx
+    ports:
+      - "8000:80"
+
   php-api:
     profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api
+    image: openml/php-rest-api:1.0.20241011
     container_name: "openml-php-rest-api"
     ports:
-      - "8080:80"
+      - "8080:80"  # also known as /api (nginx)
     env_file: config/php/.env
     depends_on:
       elasticsearch:
@@ -61,6 +69,8 @@ services:
         condition: service_completed_successfully
     volumes:
       - ${PHP_CODE_DIR:-./config/emptydir}:${PHP_CODE_VAR_WWW_OPENML:-/tmp/unused}
+      - ./logs/php:/var/www/openml/logs
+      - ./data/php:/var/www/data
     healthcheck:
       test: curl 127.0.0.1:80/api/v1/json/data/1 | grep -e "data_set_description"
       start_period: 30s
@@ -83,10 +93,10 @@ services:
 
   frontend:
     profiles: ["all", "frontend"]
-    image: openml/frontend:dev
+    image: openml/frontend:dev_1.0.20241011
     container_name: "openml-frontend"
     ports:
-      - "5000:5000"
+      - "5000:5000"  # also known as / (nginx)
     env_file: config/frontend/.env
     volumes:
       - ${FRONTEND_CODE_DIR:-.config/emptydir}:${FRONTEND_APP:-/tmp/unused}
@@ -99,7 +109,7 @@ services:
     image: openml/test-minio
     container_name: "openml-minio"
     ports:
-      - "9000:9000"
+      - "9000:9000"  # also known as /data (nginx)
       - "9001:9001"
     env_file: config/minio/.env
     command: >
@@ -117,6 +127,7 @@ services:
     volumes:
       - ${ARFF_TO_PQ_CODE_DIR:-./config/emptydir}:${ARFF_TO_PQ_APP:-/tmp/unused}
       - ./logs/arff-to-pq-converter:/home/unprivileged-user/logs
+      - ./config/arff-to-pq-converter/config:/home/unprivileged-user/.config/openml/config:ro
     depends_on:
       php-api:
         condition: service_healthy
@@ -132,7 +143,7 @@ services:
       /bin/bash -c "/run-cron.sh"
     volumes:
       - ${CROISSANT_CODE_DIR:-./config/emptydir}:${CROISSANT_APP:-/tmp/unused}
-      - ./logs/croissants-converter:/home/unprivileged-user/logs
+      - ./logs/croissant-converter:/home/unprivileged-user/logs
     depends_on:
       php-api:
         condition: service_healthy
