@@ -57,7 +57,7 @@ services:
 
   php-api:
     profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api:1.0.20241011
+    image: openml/php-rest-api:1.0.20241015
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
@@ -99,7 +99,7 @@ services:
       - "5000:5000"  # also known as / (nginx)
     env_file: config/frontend/.env
     volumes:
-      - ${FRONTEND_CODE_DIR:-.config/emptydir}:${FRONTEND_APP:-/tmp/unused}
+      - ${FRONTEND_CODE_DIR:-./config/emptydir}:${FRONTEND_APP:-/tmp/unused}
     depends_on:
       php-api:
         condition: service_healthy
@@ -114,7 +114,6 @@ services:
     env_file: config/minio/.env
     command: >
       server /export --console-address ":9001"
-
   arff-to-pq:
     profiles: ["all", "minio"]
     build:

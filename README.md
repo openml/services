@@ -106,3 +106,72 @@ FRONTEND_APP=/app                            # Always set this to /app. Leave em
 
 ### Other services
 If you want to develop a service that depends on any of the services in this docker-compose, just bring up this docker-compose and point your service to the correct endpoints.
+
+### Python
+
+You can run the openml-python code on your own local server now!
+
+```bash
+docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services_default openml/openml-python
+```
+
+
+For an example of manual tests, you can run:
+```python
+
+import openml
+from openml.tasks import TaskType
+from openml.datasets.functions import create_dataset
+import pandas as pd
+import numpy as np
+
+
+df = pd.DataFrame(np.random.randint(0,100,size=(100, 4)), columns=list('ABCD'))
+df["class"] = ["test" if np.random.randint(0, 1) == 0 else "test2" for _ in range(100)]
+df["class"] = df["class"].astype("category")
+
+dataset = create_dataset(
+    name="test_dataset",
+    description="test",
+    creator="I",
+    contributor=None,
+    collection_date="now",
+    language="en",
+    attributes="auto",
+    ignore_attribute=None,
+    citation="citation",
+    licence="BSD (from scikit-learn)",
+    default_target_attribute="class",
+    data=df,
+    version_label="test",
+    original_data_url="https://www4.stat.ncsu.edu/~boos/var.select/diabetes.html",
+    paper_url="url",
+)
+dataset.publish()
+
+# wait a minute, so that dataset is processed by the evaluation engine
+# Meanwhile you can admire your newly created dataset at http://localhost:8000/search?type=data&id=[dataset.id]
+
+my_task = openml.tasks.create_task(
+    task_type=TaskType.SUPERVISED_CLASSIFICATION,
+    dataset_id=dataset.id,
+    target_name="class",
+    evaluation_measure="predictive_accuracy",
+    estimation_procedure_id=1,
+)
+my_task.publish()
+
+# wait a minute, so that task is processed by the evaluation engine
+# Meanwhile you can check out the newly created task at localhost:8000/search?type=task&id=[my_task.id]
+
+my_task = openml.tasks.get_task(my_task.task_id)
+from sklearn import compose, ensemble, impute, neighbors, preprocessing, pipeline, tree
+clf = tree.DecisionTreeClassifier()
+run = openml.runs.run_model_on_task(clf, my_task)
+run.publish()
+
+# wait a minute, so the the run is processed by the evaluation engine
+
+run = openml.runs.get_run(run.id)
+run.evaluations
+```

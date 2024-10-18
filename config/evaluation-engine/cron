@@ -1,4 +1,4 @@
-*    * * * * $JAVA -jar $JAR -config $CONFIG -f process_dataset -x          >> ${LOG_DIR}/process_dataset.log 2>&1
-*    * * * * $JAVA -jar $JAR -config $CONFIG -f evaluate_run -x             >> ${LOG_DIR}/evaluate_run.log 2>&1
-*    * * * * $JAVA -jar $JAR -config $CONFIG -f extract_features_simple -x  >> ${LOG_DIR}/extract_features_simple.log 2>&1
-*/10 * * * * $JAVA -jar $JAR -config $CONFIG -f extract_features_all -x     >> ${LOG_DIR}/extract_features_all.log 2>&1
+*    * * * * $JAVA -jar $JAR -config $CONFIG -f process_dataset -v          >> ${LOG_DIR}/process_dataset.log 2>&1
+*    * * * * $JAVA -jar $JAR -config $CONFIG -f evaluate_run -v             >> ${LOG_DIR}/evaluate_run.log 2>&1
+*    * * * * $JAVA -jar $JAR -config $CONFIG -f extract_features_simple -v  >> ${LOG_DIR}/extract_features_simple.log 2>&1
+*/10 * * * * $JAVA -jar $JAR -config $CONFIG -f extract_features_all -v     >> ${LOG_DIR}/extract_features_all.log 2>&1

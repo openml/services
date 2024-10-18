@@ -1,4 +1,4 @@
-FROM openml/arff-to-pq-to-minio:1.0.20241011
+FROM openml/arff-to-pq-to-minio:1.0.20241018
 
 COPY cron /etc/cron.d/openml
 COPY run-cron.sh /run-cron.sh
