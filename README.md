@@ -3,7 +3,7 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 
 ## Overview
 
-![OpenML Component overview](./documentation/OpenML-overview.png)
+![OpenML Component overview](https://raw.githubusercontent.com/openml/services/main/documentation/OpenML-overview.png)
 
 ## Prerequisites
 - Linux/MacOS/Windows (should all work)
@@ -104,9 +104,6 @@ FRONTEND_CODE_DIR=/path/to/openml.org        # Python directory of https://githu
 FRONTEND_APP=/app                            # Always set this to /app. Leave empty if you leave FRONTEND_CODE_DIR empty
 ```
 
-### Other services
-If you want to develop a service that depends on any of the services in this docker-compose, just bring up this docker-compose and point your service to the correct endpoints.
-
 ### Python
 
 You can run the openml-python code on your own local server now!
@@ -177,3 +174,7 @@ run.evaluations
 
 # Expected: {'average_cost': 0.0, 'f_measure': 1.0, 'kappa': 1.0, 'mean_absolute_error': 0.0, 'mean_prior_absolute_error': 0.0, 'number_of_instances': 100.0, 'precision': 1.0, 'predictive_accuracy': 1.0, 'prior_entropy': 0.0, 'recall': 1.0, 'root_mean_prior_squared_error': 0.0, 'root_mean_squared_error': 0.0, 'total_cost': 0.0}
 ```
+
+
+### Other services
+If you want to develop a service that depends on any of the services in this docker-compose, just bring up this docker-compose and point your service to the correct endpoints.
