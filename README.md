@@ -3,7 +3,7 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 
 ## Overview
 
-![OpenML Component overview](./documentation/OpenML-overview.png)
+![OpenML Component overview](https://raw.githubusercontent.com/openml/services/main/documentation/OpenML-overview.png)
 
 ## Prerequisites
 - Linux/MacOS/Windows (should all work)
