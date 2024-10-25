@@ -57,7 +57,7 @@ services:
 
   php-api:
     profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api:1.0.20241015
+    image: openml/php-rest-api:1.0.20241018
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
@@ -93,7 +93,7 @@ services:
 
   frontend:
     profiles: ["all", "frontend"]
-    image: openml/frontend:dev_1.0.20241011
+    image: openml/frontend:dev_2.0.20241011
     container_name: "openml-frontend"
     ports:
       - "5000:5000"  # also known as / (nginx)

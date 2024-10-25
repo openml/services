@@ -1,4 +1,4 @@
-from openml/evaluation-engine:0.0.1
+from openml/evaluation-engine:1.0.20241025
 
 COPY cron /etc/cron.d/openml
 COPY run-cron.sh /run-cron.sh

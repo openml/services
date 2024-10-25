@@ -149,7 +149,6 @@ dataset = create_dataset(
 )
 dataset.publish()
 
-# wait a minute, so that dataset is processed by the evaluation engine
 # Meanwhile you can admire your newly created dataset at http://localhost:8000/search?type=data&id=[dataset.id]
 
 my_task = openml.tasks.create_task(
@@ -161,7 +160,8 @@ my_task = openml.tasks.create_task(
 )
 my_task.publish()
 
-# wait a minute, so that task is processed by the evaluation engine
+# wait a minute, so that the dataset and tasks are both processed by the evaluation engine.
+# the evaluation engine runs every minute.
 # Meanwhile you can check out the newly created task at localhost:8000/search?type=task&id=[my_task.id]
 
 my_task = openml.tasks.get_task(my_task.task_id)
@@ -172,6 +172,8 @@ run.publish()
 
 # wait a minute, so the the run is processed by the evaluation engine
 
-run = openml.runs.get_run(run.id)
+run = openml.runs.get_run(run.id, ignore_cache=True)
 run.evaluations
+
+# Expected: {'average_cost': 0.0, 'f_measure': 1.0, 'kappa': 1.0, 'mean_absolute_error': 0.0, 'mean_prior_absolute_error': 0.0, 'number_of_instances': 100.0, 'precision': 1.0, 'predictive_accuracy': 1.0, 'prior_entropy': 0.0, 'recall': 1.0, 'root_mean_prior_squared_error': 0.0, 'root_mean_squared_error': 0.0, 'total_cost': 0.0}
 ```

@@ -1,6 +1,7 @@
 /.env
 .idea
 *.log
+.cache
 data/php/dataset_structured
 data/php/run_structured
 data/php/log
