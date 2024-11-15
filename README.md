@@ -12,6 +12,13 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 
 ## Usage
 
+When using this project for the first time, run:
+```bash
+chown -R www-data:www-data data/php
+```
+This is necessary to make sure that you can upload datasets, tasks and runs. This step won't be necessary anymore once the backend stores its files on MinIO.
+
+
 You run all OpenML services locally using
 ```bash
 docker compose --profile all up -d
@@ -110,7 +117,7 @@ FRONTEND_APP=/app                            # Always set this to /app. Leave em
 You can run the openml-python code on your own local server now!
 
 ```bash
-docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services_default openml/openml-python
+docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services openml/openml-python
 ```
 
 
@@ -148,6 +155,7 @@ dataset = create_dataset(
 dataset.publish()
 
 # Meanwhile you can admire your newly created dataset at http://localhost:8000/search?type=data&id=[dataset.id]
+# Wait a minute until dataset is active
 
 my_task = openml.tasks.create_task(
     task_type=TaskType.SUPERVISED_CLASSIFICATION,
