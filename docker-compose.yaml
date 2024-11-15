@@ -161,3 +161,7 @@ services:
     depends_on:
       php-api:
         condition: service_healthy
+
+networks: 
+  default:
+    name: openml-services
