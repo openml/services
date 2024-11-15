@@ -57,7 +57,7 @@ services:
 
   php-api:
     profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api:1.0.20241018
+    image: openml/php-rest-api:v1.0.20241115
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
@@ -93,7 +93,7 @@ services:
 
   frontend:
     profiles: ["all", "frontend"]
-    image: openml/frontend:dev_2.0.20241011
+    image: openml/frontend:dev_v2.0.20241110
     container_name: "openml-frontend"
     ports:
       - "5000:5000"  # also known as / (nginx)
@@ -106,7 +106,7 @@ services:
 
   minio:
     profiles: ["all", "minio", "evaluation-engine"]
-    image: openml/test-minio
+    image: openml/test-minio:v0.1.20241110
     container_name: "openml-minio"
     ports:
       - "9000:9000"  # also known as /data (nginx)
@@ -114,6 +114,7 @@ services:
     env_file: config/minio/.env
     command: >
       server /export --console-address ":9001"
+
   arff-to-pq:
     profiles: ["all", "minio"]
     build:

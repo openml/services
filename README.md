@@ -25,10 +25,11 @@ docker compose --profile all down
 You can use different profiles:
 
 - `[no profile]`: databases
-- `"elasticsearch"`: databases + elasticsearch
-- `"rest-api"`: databases + elasticsearch + REST API
-- `"frontend"`: databases + elasticsearch + REST API + frontend + email-server
-- `"minio"`: database + elasticsearch + REST APP + MinIO + parquet and croissant conversion
+- `"elasticsearch"`: databases + nginx + elasticsearch
+- `"rest-api"`: databases + nginx + elasticsearch + REST API
+- `"frontend"`: databases + nginx + elasticsearch + REST API + frontend + email-server
+- `"minio"`: databases + nginx + elasticsearch + REST APP + MinIO + parquet and croissant conversion
+- `"evaluation-engine"`: databases + nginx + elastichsearc + REST API + MinIO + evaluation engine
 - `"all"`: everything
 
 Usage examples:
@@ -53,12 +54,12 @@ docker exec -it openml-php-rest-api /bin/bash   # go into the php rest api conta
 
 ## Endpoints
 > [!TIP]
-> If you change any port, make sure to change it for all services! The elasticsearch config, for instance, needs to know the port of the frontend (for CORS).
+> If you change any port, make sure to change it for all services!
 
 When you spin up the docker-compose, you'll get these endpoints:
-- *Frontend*: localhost:5000
+- *Frontend*: localhost:8000
 - *Database*: localhost:3306, filled with test data.
-- *ElasticSearch*: localhost:9200, filled with test data.
+- *ElasticSearch*: localhost:9200 or localhost:8000/es, filled with test data.
 - *Rest API*: localhost:8080
 - *Minio*: console at localhost:9001, filled with test data.
 
