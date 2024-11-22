@@ -26,7 +26,7 @@ services:
 
   elasticsearch:
     profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23  # This version is not available on arm. Newer version do not play well with the PHP code. See https://github.com/openml/OpenML/tree/feature/elasticsearch8
     container_name: "openml-elasticsearch"
     ports:
       - "9200:9200"  # also known as /es (nginx)
@@ -96,7 +96,7 @@ services:
     image: openml/frontend:dev_v2.0.20241110
     container_name: "openml-frontend"
     ports:
-      - "5000:5000"  # also known as / (nginx)
+      - "8081:5000"  # also known as / (nginx)
     env_file: config/frontend/.env
     volumes:
       - ${FRONTEND_CODE_DIR:-./config/emptydir}:${FRONTEND_APP:-/tmp/unused}

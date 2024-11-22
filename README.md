@@ -6,7 +6,7 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 ![OpenML Component overview](https://raw.githubusercontent.com/openml/services/main/documentation/OpenML-overview.png)
 
 ## Prerequisites
-- Linux/MacOS/Windows (should all work)
+- Linux/MacOS with Intell processor (because of our old ES version, this project currently does not support `arm` architectures)
 - [Docker](https://docs.docker.com/get-docker/) 
 - [Docker Compose](https://docs.docker.com/compose/install/) version 2.21.0 or higher
 
@@ -15,8 +15,10 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 When using this project for the first time, run:
 ```bash
 chown -R www-data:www-data data/php
+# Or, if previous fails, for instance because `www-data` does not exist:
+chmod -R 777 data/php
 ```
-This is necessary to make sure that you can upload datasets, tasks and runs. This step won't be necessary anymore once the backend stores its files on MinIO.
+This is necessary to make sure that you can upload datasets, tasks and runs. Note that the dataset data is meant to be public anyway, so a 777 should not be problematic. This step won't be necessary anymore once the backend stores its files on MinIO.
 
 
 You run all OpenML services locally using
