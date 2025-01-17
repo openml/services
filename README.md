@@ -6,11 +6,20 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 ![OpenML Component overview](https://raw.githubusercontent.com/openml/services/main/documentation/OpenML-overview.png)
 
 ## Prerequisites
-- Linux/MacOS/Windows (should all work)
+- Linux/MacOS with Intell processor (because of our old ES version, this project currently does not support `arm` architectures)
 - [Docker](https://docs.docker.com/get-docker/) 
 - [Docker Compose](https://docs.docker.com/compose/install/) version 2.21.0 or higher
 
 ## Usage
+
+When using this project for the first time, run:
+```bash
+chown -R www-data:www-data data/php
+# Or, if previous fails, for instance because `www-data` does not exist:
+chmod -R 777 data/php
+```
+This is necessary to make sure that you can upload datasets, tasks and runs. Note that the dataset data is meant to be public anyway, so a 777 should not be problematic. This step won't be necessary anymore once the backend stores its files on MinIO.
+
 
 You run all OpenML services locally using
 ```bash
@@ -25,10 +34,11 @@ docker compose --profile all down
 You can use different profiles:
 
 - `[no profile]`: databases
-- `"elasticsearch"`: databases + elasticsearch
-- `"rest-api"`: databases + elasticsearch + REST API
-- `"frontend"`: databases + elasticsearch + REST API + frontend + email-server
-- `"minio"`: database + elasticsearch + REST APP + MinIO + parquet and croissant conversion
+- `"elasticsearch"`: databases + nginx + elasticsearch
+- `"rest-api"`: databases + nginx + elasticsearch + REST API
+- `"frontend"`: databases + nginx + elasticsearch + REST API + frontend + email-server
+- `"minio"`: databases + nginx + elasticsearch + REST APP + MinIO + parquet and croissant conversion
+- `"evaluation-engine"`: databases + nginx + elastichsearc + REST API + MinIO + evaluation engine
 - `"all"`: everything
 
 Usage examples:
@@ -53,12 +63,12 @@ docker exec -it openml-php-rest-api /bin/bash   # go into the php rest api conta
 
 ## Endpoints
 > [!TIP]
-> If you change any port, make sure to change it for all services! The elasticsearch config, for instance, needs to know the port of the frontend (for CORS).
+> If you change any port, make sure to change it for all services!
 
 When you spin up the docker-compose, you'll get these endpoints:
-- *Frontend*: localhost:5000
+- *Frontend*: localhost:8000
 - *Database*: localhost:3306, filled with test data.
-- *ElasticSearch*: localhost:9200, filled with test data.
+- *ElasticSearch*: localhost:9200 or localhost:8000/es, filled with test data.
 - *Rest API*: localhost:8080
 - *Minio*: console at localhost:9001, filled with test data.
 
@@ -103,6 +113,79 @@ CROISSANT_APP=/app                                   # Always set this to /app. 
 FRONTEND_CODE_DIR=/path/to/openml.org        # Python directory of https://github.com/openml/openml.org on your computer
 FRONTEND_APP=/app                            # Always set this to /app. Leave empty if you leave FRONTEND_CODE_DIR empty
 ```
+
+### Python
+
+You can run the openml-python code on your own local server now!
+
+```bash
+docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services openml/openml-python
+```
+
+
+For an example of manual tests, you can run:
+```python
+
+import openml
+from openml.tasks import TaskType
+from openml.datasets.functions import create_dataset
+import pandas as pd
+import numpy as np
+
+
+df = pd.DataFrame(np.random.randint(0,100,size=(100, 4)), columns=list('ABCD'))
+df["class"] = ["test" if np.random.randint(0, 1) == 0 else "test2" for _ in range(100)]
+df["class"] = df["class"].astype("category")
+
+dataset = create_dataset(
+    name="test_dataset",
+    description="test",
+    creator="I",
+    contributor=None,
+    collection_date="now",
+    language="en",
+    attributes="auto",
+    ignore_attribute=None,
+    citation="citation",
+    licence="BSD (from scikit-learn)",
+    default_target_attribute="class",
+    data=df,
+    version_label="test",
+    original_data_url="https://www4.stat.ncsu.edu/~boos/var.select/diabetes.html",
+    paper_url="url",
+)
+dataset.publish()
+
+# Meanwhile you can admire your newly created dataset at http://localhost:8000/search?type=data&id=[dataset.id]
+# Wait a minute until dataset is active
+
+my_task = openml.tasks.create_task(
+    task_type=TaskType.SUPERVISED_CLASSIFICATION,
+    dataset_id=dataset.id,
+    target_name="class",
+    evaluation_measure="predictive_accuracy",
+    estimation_procedure_id=1,
+)
+my_task.publish()
+
+# wait a minute, so that the dataset and tasks are both processed by the evaluation engine.
+# the evaluation engine runs every minute.
+# Meanwhile you can check out the newly created task at localhost:8000/search?type=task&id=[my_task.id]
+
+my_task = openml.tasks.get_task(my_task.task_id)
+from sklearn import compose, ensemble, impute, neighbors, preprocessing, pipeline, tree
+clf = tree.DecisionTreeClassifier()
+run = openml.runs.run_model_on_task(clf, my_task)
+run.publish()
+
+# wait a minute, so the the run is processed by the evaluation engine
+
+run = openml.runs.get_run(run.id, ignore_cache=True)
+run.evaluations
+
+# Expected: {'average_cost': 0.0, 'f_measure': 1.0, 'kappa': 1.0, 'mean_absolute_error': 0.0, 'mean_prior_absolute_error': 0.0, 'number_of_instances': 100.0, 'precision': 1.0, 'predictive_accuracy': 1.0, 'prior_entropy': 0.0, 'recall': 1.0, 'root_mean_prior_squared_error': 0.0, 'root_mean_squared_error': 0.0, 'total_cost': 0.0}
+```
+
 
 ### Other services
 If you want to develop a service that depends on any of the services in this docker-compose, just bring up this docker-compose and point your service to the correct endpoints.

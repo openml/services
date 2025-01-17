@@ -1,4 +1,4 @@
-FROM openml/openml-arff-to-pq:v1.0.20241110
+from openml/evaluation-engine:v1.0.20241025
 
 COPY cron /etc/cron.d/openml
 COPY run-cron.sh /run-cron.sh

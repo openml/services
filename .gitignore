@@ -1,2 +1,10 @@
 /.env
 .idea
+*.log
+.cache
+data/php/dataset_structured
+data/php/run_structured
+data/php/log
+
+config/email-server/imapsql.db-shm
+config/email-server/imapsql.db-wal

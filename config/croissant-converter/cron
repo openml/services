@@ -1,1 +1,1 @@
-* * * * * /generate_croissants.sh >> /home/unprivileged-user/cron.log 2>&1
+* * * * * /generate_croissants.sh >> /home/unprivileged-user/logs/cron.log 2>&1
