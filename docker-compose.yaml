@@ -1,9 +1,11 @@
 services:
   database:
-    image: "openml/test-database"
-    container_name: "openml-test-database"
-    environment:
-      MYSQL_ROOT_PASSWORD: ok
+    image: "mysql:8.4.3-oraclelinux9"
+    container_name: "openml-database"
+    env_file: config/database/.env
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./config/database/data:/db-input
     ports:
       - "3306:3306"
     healthcheck:
@@ -14,24 +16,15 @@ services:
       interval: 5s
       retries: 10
 
-  database-setup:
-    image: mysql
-    container_name: "openml-test-database-setup"
-    volumes:
-      - ./config/database/update.sh:/database-update.sh
-    command: /bin/sh -c "/database-update.sh"
-    depends_on:
-      database:
-        condition: service_healthy
-
   elasticsearch:
-    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23  # This version is not available on arm. Newer version do not play well with the PHP code. See https://github.com/openml/OpenML/tree/feature/elasticsearch8
     container_name: "openml-elasticsearch"
     ports:
       - "9200:9200"  # also known as /es (nginx)
       - "9300:9300"
     env_file: config/elasticsearch/.env
+    volumes:
+      - ./data/mysql:/var/lib/mysql
     healthcheck:
       test: curl 127.0.0.1:9200/_cluster/health | grep -e "green"
       start_period: 30s
@@ -48,15 +41,24 @@ services:
           memory: 250M
 
   nginx:
-    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     build:
       context: config/nginx
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d/:ro
+      - ./data/certbot/www:/var/www/certbot/:ro
+      - ./data/certbot/conf/:/etc/nginx/ssl/:ro
     container_name: openml-nginx
     ports:
       - "8000:80"
 
+  certbot:
+    profiles: [certbot] 
+    image: certbot/certbot:latest
+    volumes:
+      - ./data/certbot/www/:/var/www/certbot/:rw
+      - ./data/certbot/conf/:/etc/letsencrypt/:rw
+
   php-api:
-    profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
     image: openml/php-rest-api:v1.0.20241115
     container_name: "openml-php-rest-api"
     ports:
@@ -65,12 +67,10 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
-      database-setup:
-        condition: service_completed_successfully
     volumes:
-      - ${PHP_CODE_DIR:-./config/emptydir}:${PHP_CODE_VAR_WWW_OPENML:-/tmp/unused}
       - ./logs/php:/var/www/openml/logs
       - ./data/php:/var/www/data
+    entrypoint: /scripts/set_configuration.sh
     healthcheck:
       test: curl 127.0.0.1:80/api/v1/json/data/1 | grep -e "data_set_description"
       start_period: 30s
@@ -78,35 +78,18 @@ services:
       timeout: 3s
       interval: 1m
 
-  email-server:
-    profiles: ["all", "frontend"]
-    image: foxcpp/maddy:latest
-    container_name: "email-server"
-    ports:
-      - "25:25"
-      - "143:143"
-      - "587:587"
-      - "993:993"
-    env_file: config/email-server/.env
-    volumes:
-      - ./config/email-server/:/data
-
   frontend:
-    profiles: ["all", "frontend"]
     image: openml/frontend:dev_v2.0.20241110
     container_name: "openml-frontend"
     ports:
       - "8081:5000"  # also known as / (nginx)
     env_file: config/frontend/.env
-    volumes:
-      - ${FRONTEND_CODE_DIR:-./config/emptydir}:${FRONTEND_APP:-/tmp/unused}
     depends_on:
       php-api:
         condition: service_healthy
 
   minio:
-    profiles: ["all", "minio", "evaluation-engine"]
-    image: openml/test-minio:v0.1.20241110
+    image: quay.io/minio/minio
     container_name: "openml-minio"
     ports:
       - "9000:9000"  # also known as /data (nginx)
@@ -114,53 +97,6 @@ services:
     env_file: config/minio/.env
     command: >
       server /export --console-address ":9001"
-
-  arff-to-pq:
-    profiles: ["all", "minio"]
-    build:
-      context: config/arff-to-pq-converter
-    image: openml-arff-to-pq-converter-cron
-    container_name: "openml-arff-to-pq-converter"
-    env_file: config/arff-to-pq-converter/.env
-    entrypoint: >
-      /bin/bash -c "/run-cron.sh"
-    volumes:
-      - ${ARFF_TO_PQ_CODE_DIR:-./config/emptydir}:${ARFF_TO_PQ_APP:-/tmp/unused}
-      - ./logs/arff-to-pq-converter:/home/unprivileged-user/logs
-      - ./config/arff-to-pq-converter/config:/home/unprivileged-user/.config/openml/config:ro
-    depends_on:
-      php-api:
-        condition: service_healthy
-
-  croissants:
-    profiles: ["all", "minio"]
-    build:
-      context: config/croissant-converter
-    image: openml-croissant-converter-cron
-    container_name: "openml-croissant-converter"
-    env_file: config/croissant-converter/.env
-    entrypoint: >
-      /bin/bash -c "/run-cron.sh"
-    volumes:
-      - ${CROISSANT_CODE_DIR:-./config/emptydir}:${CROISSANT_APP:-/tmp/unused}
-      - ./logs/croissant-converter:/home/unprivileged-user/logs
-    depends_on:
-      php-api:
-        condition: service_healthy
-
-  evaluation-engine:
-    profiles: ["all", "evaluation-engine"]
-    build:
-      context: config/evaluation-engine
-    container_name: openml-evaluation-engine
-    entrypoint: >
-      /bin/bash -c "/run-cron.sh"
-    env_file: config/evaluation-engine/.env
-    volumes:
-      - ./logs/evaluation-engine:/home/unprivileged-user/logs
-    depends_on:
-      php-api:
-        condition: service_healthy
 
 networks: 
   default:
