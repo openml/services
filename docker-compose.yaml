@@ -50,7 +50,6 @@ services:
     container_name: openml-nginx
     ports:
       - "8000:80"
-
   certbot:
     profiles: [certbot] 
     image: certbot/certbot:latest
@@ -84,6 +83,8 @@ services:
     ports:
       - "8081:5000"  # also known as / (nginx)
     env_file: config/frontend/.env
+    volumes:
+      - ./config/frontend/index.html:/app/server/src/client/app/build/index.html
     depends_on:
       php-api:
         condition: service_healthy
