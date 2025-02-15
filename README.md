@@ -1,6 +1,7 @@
 # Read Only services
-This is the read-only deployment that ran at the start of 2025 when the Eindhoven network was down.
-Do not merge this with develop!
+This is the read-only deployment that ran at the start of 2025 when the Eindhoven network was down. See [Openml-internal-infra-wiki](https://github.com/openml/openml-internal-infra-wiki/blob/main/pages/read-only-deployment.md) for usage of this branch.
+
+Do not merge this with develop! 
 
 Overview of all OpenML components including a docker-compose to run OpenML services locally
 
