@@ -1,4 +1,7 @@
-# services
+# Read Only services
+This is the read-only deployment that ran at the start of 2025 when the Eindhoven network was down.
+Do not merge this with develop!
+
 Overview of all OpenML components including a docker-compose to run OpenML services locally
 
 ## Overview
