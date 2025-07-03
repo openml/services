@@ -28,6 +28,7 @@ services:
     profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23  # This version is not available on arm. Newer version do not play well with the PHP code. See https://github.com/openml/OpenML/tree/feature/elasticsearch8
     container_name: "openml-elasticsearch"
+    platform: "linux/amd64"
     ports:
       - "9200:9200"  # also known as /es (nginx)
       - "9300:9300"
@@ -73,7 +74,7 @@ services:
       - ./data/php:/var/www/data
     healthcheck:
       test: curl 127.0.0.1:80/api/v1/json/data/1 | grep -e "data_set_description"
-      start_period: 30s
+      start_period: 2m
       start_interval: 5s
       timeout: 3s
       interval: 1m
@@ -82,6 +83,7 @@ services:
     profiles: ["all", "frontend"]
     image: foxcpp/maddy:latest
     container_name: "email-server"
+    platform: "linux/amd64"
     ports:
       - "25:25"
       - "143:143"
