@@ -26,3 +26,6 @@ mysql -hdatabase -uroot -pok -Dopenml_expdb -e 'CREATE TABLE IF NOT EXISTS `data
 # SET dataset 1 to active (used in unittests java)
 mysql -hdatabase -uroot -pok -Dopenml_expdb -e 'INSERT IGNORE INTO dataset_status VALUES (1, "active", "2024-01-01 00:00:00", 1)'
 mysql -hdatabase -uroot -pok -Dopenml_expdb -e 'DELETE FROM dataset_status WHERE did = 2 AND status = "deactivated";'
+
+# Temporary fix in case the database missed the kaggle table. The PHP Rest API expects the table to be there, while indexing.
+mysql -hdatabase -uroot -pok -Dopenml_expdb -e 'CREATE TABLE IF NOT EXISTS `kaggle` (`dataset_id` int(11) DEFAULT NULL, `kaggle_link` varchar(500) DEFAULT NULL)'
