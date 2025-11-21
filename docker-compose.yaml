@@ -1,6 +1,6 @@
 services:
   database:
-    image: "openml/test-database"
+    image: "openml/test-database:20240105"
     container_name: "openml-test-database"
     environment:
       MYSQL_ROOT_PASSWORD: ok
@@ -57,7 +57,7 @@ services:
 
   php-api:
     profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api:v1.0.20241115
+    image: openml/php-rest-api:v1.2.1
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
@@ -93,7 +93,7 @@ services:
 
   frontend:
     profiles: ["all", "frontend"]
-    image: openml/frontend:dev_v2.0.20241110
+    image: openml/frontend:dev_v2.0.20251111
     container_name: "openml-frontend"
     ports:
       - "8081:5000"  # also known as / (nginx)
@@ -133,20 +133,14 @@ services:
         condition: service_healthy
 
   croissants:
-    profiles: ["all", "minio"]
-    build:
-      context: config/croissant-converter
-    image: openml-croissant-converter-cron
+    profiles: ["all"]
+    image: "openml/croissant-converter:v1.4.2"
     container_name: "openml-croissant-converter"
     env_file: config/croissant-converter/.env
-    entrypoint: >
-      /bin/bash -c "/run-cron.sh"
-    volumes:
-      - ${CROISSANT_CODE_DIR:-./config/emptydir}:${CROISSANT_APP:-/tmp/unused}
-      - ./logs/croissant-converter:/home/unprivileged-user/logs
-    depends_on:
-      php-api:
-        condition: service_healthy
+    ports:
+      - "8001:8001"
+    command: >
+      web_api.py --host "0.0.0.0" --port 8001
 
   evaluation-engine:
     profiles: ["all", "evaluation-engine"]
@@ -154,14 +148,14 @@ services:
       context: config/evaluation-engine
     container_name: openml-evaluation-engine
     entrypoint: >
-      /bin/bash -c "/run-cron.sh"
+      sh /run-cron.sh
     env_file: config/evaluation-engine/.env
     volumes:
-      - ./logs/evaluation-engine:/home/unprivileged-user/logs
+      - ./logs/evaluation-engine:/logs
     depends_on:
       php-api:
         condition: service_healthy
 
-networks: 
+networks:
   default:
     name: openml-services
