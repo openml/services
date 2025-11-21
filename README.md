@@ -113,6 +113,11 @@ CROISSANT_APP=/app                                   # Always set this to /app. 
 FRONTEND_CODE_DIR=/path/to/openml.org        # Python directory of https://github.com/openml/openml.org on your computer
 FRONTEND_APP=/app                            # Always set this to /app. Leave empty if you leave FRONTEND_CODE_DIR empty
 ```
+Make sure the code in your frontend directory is build, by running (from your local `FRONTEND_CODE_DIR` dir)
+```bash
+./server/src/client/app/node_modules/.bin/env-cmd -f ./.env.dev npm install --prefix server/src/client/app
+./server/src/client/app/node_modules/.bin/env-cmd -f ./.env.dev npm run build --prefix server/src/client/app
+```
 
 ### Python
 
