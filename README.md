@@ -1,3 +1,9 @@
+## Note
+This PR was created with assistance from GitHub Copilot to ensure comprehensive 
+documentation and proper testing on M4 hardware. I personally tested the services 
+on a M4 Mac and verified they work correctly with Rosetta 2 emulation.
+
+
 # services
 Overview of all OpenML components including a docker-compose to run OpenML services locally
 
