@@ -10,6 +10,13 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 - [Docker](https://docs.docker.com/get-docker/) 
 - [Docker Compose](https://docs.docker.com/compose/install/) version 2.21.0 or higher
 
+## Cloning `services` repository
+
+Colne the repo from GitHub:
+```bash
+git clone https://github.com/openml/services.git
+```
+
 ## Usage
 
 When using this project for the first time, run:
