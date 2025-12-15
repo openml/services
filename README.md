@@ -1,5 +1,7 @@
-# services
-Overview of all OpenML components including a docker-compose to run OpenML services locally
+# Backend
+This guide is applicable to APIv1, please find the APIv2 setup guide [here](https://docs.openml.org/apiv2/contributing/contributing/).
+
+Overview of all OpenML components including a docker-compose to run OpenML services locally. 
 
 ## Overview
 
@@ -12,7 +14,7 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 
 ## Cloning `services` repository
 
-Colne the repo from GitHub:
+Clone the repo from GitHub:
 ```bash
 git clone https://github.com/openml/services.git
 ```
