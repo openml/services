@@ -1,1 +1,1 @@
-server=http://nginx:80/api/v1/xml
+server=http://nginx:8000/api/v1/xml
