@@ -6,7 +6,7 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 ![OpenML Component overview](https://raw.githubusercontent.com/openml/services/main/documentation/OpenML-overview.png)
 
 ## Prerequisites
-- Linux/MacOS with Intell processor (because of our old ES version, this project currently does not support `arm` architectures)
+- Linux/MacOS (For Mac with `arm` architectures, enable Rosetta for emulation. QEMU and Docker VMM do not work with the elastic search image)
 - [Docker](https://docs.docker.com/get-docker/) 
 - [Docker Compose](https://docs.docker.com/compose/install/) version 2.21.0 or higher
 
