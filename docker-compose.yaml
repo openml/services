@@ -1,6 +1,6 @@
 services:
   database:
-    image: "openml/test-database:v0.1.20260129"
+    image: "openml/test-database:v0.1.20260204"
     container_name: "openml-test-database"
     environment:
       MYSQL_ROOT_PASSWORD: ok
@@ -114,7 +114,7 @@ services:
 
   minio:
     profiles: ["all", "minio", "evaluation-engine"]
-    image: openml/test-minio:v0.1.20260129
+    image: openml/test-minio:v0.1.20260204
     container_name: "openml-minio"
     ports:
       - "9000:9000"  # also known as /data (nginx)
