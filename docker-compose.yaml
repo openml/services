@@ -101,7 +101,7 @@ services:
 
   frontend:
     profiles: ["all", "frontend"]
-    image: openml/frontend:dev_v2.0.20251111
+    image: openml/frontend:v2.1.1
     container_name: "openml-frontend"
     ports:
       - "8081:5000"  # also known as / (nginx)
