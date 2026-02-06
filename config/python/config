@@ -1,2 +1,2 @@
-apikey=AD000000000000000000000000000000
-server=http://nginx:80/api/v1/xml
+apikey=normaluser
+server=http://localhost:8000/api/v1/xml
