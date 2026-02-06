@@ -81,10 +81,10 @@ services:
 
   python-api:
     profiles: ["all", "rest-api"]
-    image: openml/rest-api:v0.0.0
+    image: openml/rest-api:0.0.1-alpha
     container_name: "openml-python-rest-api"
     ports:
-      - "8082:8000"  # currently not reachable through nginx
+      - "8082:8000"  # or localhost:8000/py with nginx
     depends_on:
       database-setup:
         condition: service_completed_successfully
@@ -96,8 +96,6 @@ services:
         condition: service_started  # used for routing to MinIO and PHP REST API
     volumes:
       - ./config/python/config.toml:/python-api/src/config.toml
-      #- ${PHP_CODE_DIR:-./config/emptydir}:${PHP_CODE_VAR_WWW_OPENML:-/tmp/unused}
-    # - ./logs/python:/var/www/openml/logs
     healthcheck:
       test: curl 127.0.0.1:8000/datasets/1 | grep -e "anneal"
       start_period: 1m
