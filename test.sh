@@ -8,7 +8,7 @@
 set -e
 
 assert_contains() {
-  if echo "$1" | grep -q "$2"; then
+  if echo "$1" | grep --ignore-case -q "$2"; then
     echo "PASS: output contains '$2'"
   else
     echo "FAIL: output does not contain '$2'"
@@ -19,7 +19,7 @@ assert_contains() {
 }
 
 assert_url_exists() {
-  if curl --output /dev/null --silent --head --fail "$1"; then
+  if curl --output /dev/null --silent --head --fail --location "$1"; then
     echo "PASS: $1 exists"
   else
     echo "FAIL: $1 does not exist"
@@ -40,6 +40,7 @@ assert_contains "$DESCRIPTION" "diabetes"
 
 wget "$DATASET_URL" -O dataset.arff
 assert_contains "$(cat dataset.arff)" "@data"
+rm dataset.arff
 
 if [ -d .venv ]; then
   echo "Using existing virtual environment for dataset upload."
@@ -92,10 +93,11 @@ if ! echo "$DATA_ID" | grep -q '^[0-9]\+$'; then
   exit 1
 fi
 
-PADDED_ID=$(printf "%04d" "$DATA_ID")
-NEW_DATASET_URL="http://localhost:8000/datasets/0000/${PADDED_ID}/dataset.arff"
-
+NEW_DATASET_URL=$(curl -s http://localhost:8000/api/v1/json/data/169 | jq -r ".data_set_description.url")
 assert_url_exists "$NEW_DATASET_URL"
+wget "$NEW_DATASET_URL" -O new_dataset.arff
+assert_contains "$(cat new_dataset.arff)" "@data"
+rm new_dataset.arff
 
 # Wait for the dataset to become active, polling every 10 seconds for up to 2 minutes
 WAITED=0
@@ -117,8 +119,13 @@ if [ "$WAITED" -ge 120 ]; then
   exit 1
 fi
 
-NEW_PARQUET_URL="${NEW_DATASET_URL%.arff}.pq"
-assert_url_exists "$NEW_PARQUET_URL"
+echo "Checking parquet conversion"
+PADDED_ID=$(printf "%04d" "$DATA_ID")
+NEW_PARQUET_URL="http://localhost:8000/minio/datasets/0000/${PADDED_ID}/dataset_${DATA_ID}.pq"
+wget "$NEW_PARQUET_URL" 
+DATA_SHAPE=$(.venv/bin/python -c "import pandas as pd; df = pd.read_parquet(\"dataset_${DATA_ID}.pq\"); print(df.shape)")
+assert_contains "${DATA_SHAPE}" "(3, 4)"
+rm "dataset_${DATA_ID}.pq"
 
 CROISSANT_URL="http://localhost:8000/croissant/dataset/${DATA_ID}"
 CROISSANT_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" "$CROISSANT_URL")
