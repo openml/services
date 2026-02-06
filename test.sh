@@ -128,13 +128,8 @@ assert_contains "${DATA_SHAPE}" "(3, 4)"
 rm "dataset_${DATA_ID}.pq"
 
 CROISSANT_URL="http://localhost:8000/croissant/dataset/${DATA_ID}"
-CROISSANT_STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" "$CROISSANT_URL")
-if [ "$CROISSANT_STATUS" = "200" ]; then
-  echo "PASS: $CROISSANT_URL exists (HTTP $CROISSANT_STATUS)"
-else
-  echo "FAIL: $CROISSANT_URL returned HTTP $CROISSANT_STATUS"
-  exit 1
-fi
+CROISSANT_NAME=$(curl -s ${CROISSANT_URL} | jq -r ".name")
+assert_contains ${CROISSANT_NAME} "test-data"
 
 ES_RESPONSE=$(curl -s "http://localhost:8000/es/data/_doc/${DATA_ID}")
-assert_contains "$ES_RESPONSE" "test-data"
+assert_contains "${ES_RESPONSE}" "test-data"
