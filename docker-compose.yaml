@@ -79,6 +79,7 @@ services:
       timeout: 3s
       interval: 1m
 
+  # This is the new REST API, which will later replace the PHP REST API
   python-api:
     profiles: ["all", "rest-api"]
     image: openml/rest-api:0.0.1-alpha
@@ -89,13 +90,13 @@ services:
       database-setup:
         condition: service_completed_successfully
       php-api:
-        condition: service_healthy  # used for servering arff files
+        condition: service_healthy  # used for serving arff files
       minio:
-        condition: service_started  # used for servering parquet files
+        condition: service_started  # used for serving parquet files
       nginx:
         condition: service_started  # used for routing to MinIO and PHP REST API
     volumes:
-      - ./config/python/config.toml:/python-api/src/config.toml
+      - ./config/python-server/config.toml:/python-api/src/config.toml
     healthcheck:
       test: curl 127.0.0.1:8000/datasets/1 | grep -e "anneal"
       start_period: 1m
