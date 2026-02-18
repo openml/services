@@ -6,7 +6,7 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 ![OpenML Component overview](https://raw.githubusercontent.com/openml/services/main/documentation/OpenML-overview.png)
 
 ## Prerequisites
-- Linux/MacOS with Intell processor (because of our old ES version, this project currently does not support `arm` architectures)
+- Linux/MacOS (For Mac with `arm` architectures, enable Rosetta for emulation. QEMU and Docker VMM do not work with the elastic search image)
 - [Docker](https://docs.docker.com/get-docker/) 
 - [Docker Compose](https://docs.docker.com/compose/install/) version 2.21.0 or higher
 
@@ -122,11 +122,17 @@ Make sure the code in your frontend directory is build, by running (from your lo
 ### Python
 
 You can run the openml-python code on your own local server now!
+Normally, you would be able to run the following command to start a Python console:
 
 ```bash
-docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services openml/openml-python
+docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services --add-host localhost:172.28.0.2 openml/openml-python
 ```
 
+But the current image is a bit out of date so instead start the container with:
+
+```bash
+docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services --add-host localhost:172.28.0.2 --entrypoint=/bin/bash openml/openml-python -c "/openml/venv/bin/python -m pip install -U pyarrow pandas  && cd /openml && /openml/venv/bin/python"
+```
 
 For an example of manual tests, you can run:
 ```python
