@@ -118,6 +118,9 @@ Make sure the code in your frontend directory is build, by running (from your lo
 ./server/src/client/app/node_modules/.bin/env-cmd -f ./.env.dev npm install --prefix server/src/client/app
 ./server/src/client/app/node_modules/.bin/env-cmd -f ./.env.dev npm run build --prefix server/src/client/app
 ```
+#### Python REST API
+The work-in-progress Python-based REST API is available at `http://localhost:8000/py` through nginx or `http://localhost:8082` directly.
+Mounting code through environment variables is not yet supported for this service.
 
 ### Python
 
