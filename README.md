@@ -1,5 +1,8 @@
-# services
-Overview of all OpenML components including a docker-compose to run OpenML services locally
+# Backend
+Overview of all OpenML components including a docker-compose to run OpenML services locally. 
+The Python-based REST API (or REST API version 2) is still experimental, the other services are used in production.
+
+Note: For the development of the Python-based REST API, a separate definition of services is currently maintained. These are in that repository, see the [Python REST API](https://docs.openml.org/apiv2/contributing/contributing/) documentation for more information.
 
 ## Overview
 
@@ -9,6 +12,13 @@ Overview of all OpenML components including a docker-compose to run OpenML servi
 - Linux/MacOS (For Mac with `arm` architectures, enable Rosetta for emulation. QEMU and Docker VMM do not work with the elastic search image)
 - [Docker](https://docs.docker.com/get-docker/) 
 - [Docker Compose](https://docs.docker.com/compose/install/) version 2.21.0 or higher
+
+## Cloning `services` repository
+
+Clone the repo from GitHub:
+```bash
+git clone https://github.com/openml/services.git
+```
 
 ## Usage
 
