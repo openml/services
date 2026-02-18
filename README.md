@@ -122,11 +122,17 @@ Make sure the code in your frontend directory is build, by running (from your lo
 ### Python
 
 You can run the openml-python code on your own local server now!
+Normally, you would be able to run the following command to start a Python console:
 
 ```bash
-docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services openml/openml-python
+docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services --add-host localhost:172.28.0.2 openml/openml-python
 ```
 
+But the current image is a bit out of date so instead start the container with:
+
+```bash
+docker run --rm -it -v ./config/python/config:/root/.config/openml/config:ro --network openml-services --add-host localhost:172.28.0.2 --entrypoint=/bin/bash openml/openml-python -c "/openml/venv/bin/python -m pip install -U pyarrow pandas  && cd /openml && /openml/venv/bin/python"
+```
 
 For an example of manual tests, you can run:
 ```python
