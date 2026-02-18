@@ -85,6 +85,31 @@ services:
     extra_hosts:
       - "localhost=172.28.0.2"
 
+  # This is the new REST API, which will later replace the PHP REST API
+  python-api:
+    profiles: ["all", "rest-api"]
+    image: openml/rest-api:0.0.1-alpha
+    container_name: "openml-python-rest-api"
+    ports:
+      - "8082:8000"  # or localhost:8000/py with nginx
+    depends_on:
+      database-setup:
+        condition: service_completed_successfully
+      php-api:
+        condition: service_healthy  # used for serving arff files
+      minio:
+        condition: service_started  # used for serving parquet files
+      nginx:
+        condition: service_started  # used for routing to MinIO and PHP REST API
+    volumes:
+      - ./config/python-server/config.toml:/python-api/src/config.toml
+    healthcheck:
+      test: curl 127.0.0.1:8000/datasets/1 | grep -e "anneal"
+      start_period: 1m
+      start_interval: 5s
+      timeout: 3s
+      interval: 1m
+
   email-server:
     profiles: ["all", "frontend"]
     image: foxcpp/maddy:latest

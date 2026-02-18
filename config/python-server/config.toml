@@ -1,0 +1,21 @@
+arff_base_url="http://localhost:8000"
+minio_base_url="http://localhost:8000/minio"
+
+[fastapi]
+root_path=""
+
+[databases.defaults]
+host="openml-test-database"
+port="3306"
+# SQLAlchemy `dialect` and `driver`: https://docs.sqlalchemy.org/en/20/dialects/index.html
+drivername="mysql"
+
+[databases.expdb]
+database="openml_expdb"
+
+[databases.openml]
+database="openml"
+
+[routing]
+minio_url="http://localhost:8000/minio/"
+server_url="http://localhost:8000/"
