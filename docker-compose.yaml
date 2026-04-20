@@ -32,9 +32,11 @@ services:
     ports:
       - "9200:9200"  # also known as /es (nginx)
       - "9300:9300"
+    volumes:
+      - ./config/elasticsearch/roles.yml:/usr/share/elasticsearch/config/roles.yml:ro
     env_file: config/elasticsearch/.env
     healthcheck:
-      test: curl 127.0.0.1:9200/_cluster/health | grep -e "green"
+      test: curl 127.0.0.1:9200/_cluster/health -u elastic:default | grep -e "green"
       start_period: 30s
       start_interval: 5s
       timeout: 3s
