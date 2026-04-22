@@ -69,6 +69,7 @@ services:
     build:
       context: config/logstash/
       dockerfile: Dockerfile
+    env_file: config/logstash/.env
     volumes:
       - ./config/logstash/pipeline/:/usr/share/logstash/pipeline/
       #- ./config/logstash/config/:/usr/share/logstash/config/
