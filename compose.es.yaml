@@ -72,6 +72,7 @@ services:
     env_file: config/logstash/.env
     volumes:
       - ./config/logstash/pipeline/:/usr/share/logstash/pipeline/
+      - ./config/logstash/pipeline/queries/:/usr/share/logstash/pipeline/queries/
       #- ./config/logstash/config/:/usr/share/logstash/config/
 
 
