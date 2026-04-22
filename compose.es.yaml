@@ -65,7 +65,10 @@ services:
 
   logstash:
     profiles: ["es9"]
-    image: logstash:9.3.3
+    image: openml-logstash
+    build:
+      context: config/logstash/
+      dockerfile: Dockerfile
     volumes:
       - ./config/logstash/pipeline/:/usr/share/logstash/pipeline/
       #- ./config/logstash/config/:/usr/share/logstash/config/
