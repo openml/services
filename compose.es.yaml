@@ -52,6 +52,9 @@ services:
     profiles: ["es9"]
     container_name: "elasticsearch"
     image:  docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.3.3
+    ports:
+      - "9201:9200"
+      - "9301:9300"
     #ports:
     #  - "9200:9200"  # also known as /es (nginx)
     #  - "9300:9300"
@@ -73,7 +76,7 @@ services:
     volumes:
       - ./config/logstash/pipeline/:/usr/share/logstash/pipeline/
       - ./config/logstash/pipeline/queries/:/usr/share/logstash/pipeline/queries/
-      #- ./config/logstash/config/:/usr/share/logstash/config/
+      - ./config/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
 
 
 
