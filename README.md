@@ -82,6 +82,18 @@ When you spin up the docker-compose, you'll get these endpoints:
 - *Rest API*: localhost:8080
 - *Minio*: console at localhost:9001, filled with test data.
 
+## Connect to specific container
+
+You can connect to specific images by using the following command:
+```
+docker exec -it <name of container> <command>
+```
+
+This means that the following command would create an iterative (`-it`) session on container `openml-test-database` using the command `mysql -uroot -p -d openml_expdb`:
+```
+docker exec -it openml-test-database mysql -uroot -p -d openml_expdb
+```
+
 ## Credentials
 The credentials for the database can be found in `config/database/.env`, for minio in `config/minio/.env`, etc.
 
