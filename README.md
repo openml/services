@@ -106,9 +106,9 @@ be slightly altered to use them in the test setup: change https to http.
 ## Development
 
 ### PHP, Parquet and Croissant converter
-If you want to do local development on containers that are part of the docker-compose, you want those containers to change based on your code. You should have the relevant code somewhere on your system, you only need to tell the docker-compose where to find it. You can do so by setting environment variables. 
+If you want to do local development on containers that are part of the docker-compose, you want those containers to change based on your code. You should have the relevant code somewhere on your system. You will need to tell the docker-compose where to find it. You can do so by setting environment variables.
 
-Create a `.env` file inside this directory, and set:
+Create a new `.env` file inside this root directory, and set the following values depending on what development you are doing:
 
 #### PHP
 ```bash
@@ -116,7 +116,11 @@ PHP_CODE_DIR=/path/to/OpenML                  # Root of https://github.com/openm
 PHP_CODE_VAR_WWW_OPENML=/var/www/openml       # Always set this to /var/www/openml. Leave empty if you leave PHP_CODE_DIR empty
 ```
 
-Make sure to create `openml_OS/config/BASE_CONFIG.php` in your local `$PHP_CODE_DIR`. The correct configuration can be found in `config/php.env`. Run docker compose with profile `rest-api`.
+Important: 
+Make sure to create `openml_OS/config/BASE_CONFIG.php` in your local `$PHP_CODE_DIR`.
+You can copy `openml_OS/config/BASE_CONFIG-BLANK.php` into `openml_OS/config/BASE_CONFIG.php` directly and leave all values as is. All needed values are filled in at startup time for the container.
+
+Run docker compose with profile `rest-api` (or `all`) to start the PHP container.
 
 #### Parquet
 ```bash
