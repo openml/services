@@ -62,10 +62,8 @@ services:
 
   php-api:
     profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-api:dev
+    image: openml/php-rest-api:v1.2.4
     container_name: "openml-php-rest-api"
-    cap_add:
-      - SYS_PTRACE
     ports:
       - "8080:80"  # also known as /api (nginx)
     env_file: config/php/.env
