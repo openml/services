@@ -63,7 +63,7 @@ The Python REST API is also available in a 'light' mode that allows for database
 but does not allow for file uploads/downloads. It has to be started directly (as opposed to
 through a profile):
 ```bash
-docker compose up python-rest-api-light -d
+docker compose up python-api-light -d
 docker compose down
 ```
 While it is up, the API is available under `http://localhost:8082`, e.g., `http://localhost:8082/datasets/1`.
