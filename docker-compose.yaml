@@ -85,13 +85,34 @@ services:
     extra_hosts:
       - "localhost=172.28.0.2"
 
-  # This is the new REST API, which will later replace the PHP REST API
-  python-api:
-    profiles: ["all", "rest-api"]
+  # The Python based REST API is set to replace the PHP based REST API
+  # The 'light' profile can be used to test most of the REST API 
+  # (everything except file uploads/downloads), but is 
+  # faster to start and requires fewer resources to run.
+  python-api-light:
+    # if no profile is set below, it starts on all `compose up` invocations,
+    # which leads to port conflict if `python-api` is also started.
+    profiles: ["rest-api-light"]
     image: openml/rest-api:0.0.1-alpha
-    container_name: "openml-python-rest-api"
+    container_name: "openml-python-rest-api-light"
     ports:
       - "8082:8000"  # or localhost:8000/py with nginx
+    depends_on:
+      database-setup:
+        condition: service_completed_successfully
+    volumes:
+      - ./config/python-server/config.toml:/python-api/src/config.toml
+    healthcheck:
+      test: curl 127.0.0.1:8000/datasets/1 | grep -e "anneal"
+      start_period: 1m
+      start_interval: 5s
+      timeout: 3s
+      interval: 1m
+
+  python-api:
+    profiles: ["all", "rest-api"]
+    container_name: "openml-python-rest-api"
+    extends: python-api-light
     depends_on:
       database-setup:
         condition: service_completed_successfully
@@ -101,14 +122,6 @@ services:
         condition: service_started  # used for serving parquet files
       nginx:
         condition: service_started  # used for routing to MinIO and PHP REST API
-    volumes:
-      - ./config/python-server/config.toml:/python-api/src/config.toml
-    healthcheck:
-      test: curl 127.0.0.1:8000/datasets/1 | grep -e "anneal"
-      start_period: 1m
-      start_interval: 5s
-      timeout: 3s
-      interval: 1m
 
   email-server:
     profiles: ["all", "frontend"]
@@ -138,7 +151,7 @@ services:
         condition: service_healthy
 
   minio:
-    profiles: ["all", "minio", "evaluation-engine"]
+    profiles: ["all", "minio", "rest-api", "evaluation-engine"]
     image: openml/test-minio:v0.1.20260204
     container_name: "openml-minio"
     ports:
