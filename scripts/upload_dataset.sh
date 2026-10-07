@@ -19,8 +19,12 @@ XML_DESCRIPTION='<oml:data_set_description xmlns:oml="http://openml.org/openml">
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+TMPFILE=$(mktemp /tmp/dataset_desc.XXXXXX.xml)
+trap 'rm -f "$TMPFILE"' EXIT
+echo "$XML_DESCRIPTION" > "$TMPFILE"
+
 RESPONSE=$(curl -s -X POST "http://localhost:8000/api/v1/xml/data?api_key=normaluser" \
-  -F "description=<-;type=text/xml" <<< "${XML_DESCRIPTION}" \
+  -F "description=@${TMPFILE};type=text/xml" \
   -F "dataset=@${SCRIPT_DIR}/data/test.arff")
 
 DATASET_ID=$(echo "$RESPONSE" | sed -n 's/.*<oml:id>\([0-9]*\)<\/oml:id>.*/\1/p')
