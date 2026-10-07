@@ -34,7 +34,7 @@ services:
       - "9300:9300"
     env_file: config/elasticsearch/.env
     healthcheck:
-      test: curl 127.0.0.1:9200/_cluster/health | grep -e "green"
+      test: curl -A "healthcheck" 127.0.0.1:9200/_cluster/health | grep -e "green"
       start_period: 30s
       start_interval: 5s
       timeout: 3s
@@ -77,7 +77,7 @@ services:
       - ./logs/php:/var/www/openml/logs
       - ./data/php:/var/www/data
     healthcheck:
-      test: curl 127.0.0.1:80/api/v1/json/data/1 | grep -e "data_set_description"
+      test: curl -A "healthcheck" 127.0.0.1:80/api/v1/json/data/1 | grep -e "data_set_description"
       start_period: 2m
       start_interval: 5s
       timeout: 3s
@@ -103,7 +103,7 @@ services:
     volumes:
       - ./config/python-server/config.toml:/python-api/src/config.toml
     healthcheck:
-      test: curl 127.0.0.1:8000/datasets/1 | grep -e "anneal"
+      test: curl -A "healthcheck" 127.0.0.1:8000/datasets/1 | grep -e "anneal"
       start_period: 1m
       start_interval: 5s
       timeout: 3s
