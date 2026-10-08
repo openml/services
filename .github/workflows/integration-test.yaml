@@ -61,3 +61,30 @@ jobs:
       - name: Show logs on failure
         if: failure()
         run: docker compose logs --tail=50
+
+  run-processing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start services
+        uses: ./.github/actions/start-services
+        with:
+          profiles: "rest-api,evaluation-engine"
+
+      - name: Upload run
+        id: run
+        run: |
+          RUN_ID=$(bash scripts/upload_run.sh)
+          echo "Run ID: $RUN_ID"
+          echo "id=$RUN_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Run Processing
+        run: bash scripts/wait_for_run.sh "${{ steps.run.outputs.id }}" 180
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --tail=50
