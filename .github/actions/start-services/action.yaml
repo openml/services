@@ -14,6 +14,11 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Set permission for mount paths
+      shell: bash
+      run: |
+        chmod -R 777 ./data/php
+        chmod -R 777 ./logs
     - name: Start services
       shell: bash
       run: |
