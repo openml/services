@@ -1,0 +1,90 @@
+name: Integration Test
+
+on:
+  pull_request:
+    paths:
+      - "docker-compose.yaml"
+      - "scripts/**"
+      - "config/**"
+
+jobs:
+  dataset-processing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start services
+        uses: ./.github/actions/start-services
+        with:
+          profiles: "rest-api,evaluation-engine"
+
+      - name: Create dataset
+        id: dataset
+        run: |
+          DATASET_ID=$(bash scripts/upload_dataset.sh)
+          echo "Dataset ID: $DATASET_ID"
+          echo "id=$DATASET_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Dataset Processing
+        run: bash scripts/wait_for_dataset.sh "${{ steps.dataset.outputs.id }}" 180
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --tail=50
+
+  task-processing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start services
+        uses: ./.github/actions/start-services
+        with:
+          profiles: "rest-api,evaluation-engine"
+
+      - name: Create task
+        id: task
+        run: |
+          TASK_ID=$(bash scripts/create_task.sh 129 1)
+          echo "Task ID: $TASK_ID"
+          echo "id=$TASK_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Task Processing
+        run: bash scripts/wait_for_task.sh "${{ steps.task.outputs.id }}" 180
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --tail=50
+
+  run-processing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start services
+        uses: ./.github/actions/start-services
+        with:
+          profiles: "rest-api,evaluation-engine"
+
+      - name: Upload run
+        id: run
+        run: |
+          RUN_ID=$(bash scripts/upload_run.sh)
+          echo "Run ID: $RUN_ID"
+          echo "id=$RUN_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Run Processing
+        run: bash scripts/wait_for_run.sh "${{ steps.run.outputs.id }}" 180
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --tail=50

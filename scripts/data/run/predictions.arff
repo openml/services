@@ -1,0 +1,170 @@
+% Python_3.10.16.
+% Sklearn_1.6.1.
+% NumPy_2.2.2.
+% SciPy_1.15.1.
+% Thu Oct  8 10:27:27 2026
+% Created by run_flow_on_task
+@RELATION openml_task_1196_predictions
+
+@ATTRIBUTE repeat NUMERIC
+@ATTRIBUTE fold NUMERIC
+@ATTRIBUTE sample NUMERIC
+@ATTRIBUTE row_id NUMERIC
+@ATTRIBUTE prediction {Iris-setosa, Iris-versicolor, Iris-virginica}
+@ATTRIBUTE correct {Iris-setosa, Iris-versicolor, Iris-virginica}
+@ATTRIBUTE confidence.Iris-setosa NUMERIC
+@ATTRIBUTE confidence.Iris-versicolor NUMERIC
+@ATTRIBUTE confidence.Iris-virginica NUMERIC
+
+@DATA
+0,0,0,43,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,0,0,14,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,0,0,37,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,0,0,23,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,0,0,10,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,0,0,99,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,0,0,87,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,0,0,97,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,0,0,62,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,0,0,92,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,0,0,119,Iris-versicolor,Iris-virginica,0.0,1.0,0.0
+0,0,0,111,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,0,0,144,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,0,0,116,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,0,0,125,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,1,0,49,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,1,0,15,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,1,0,47,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,1,0,0,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,1,0,44,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,1,0,76,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,1,0,89,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,1,0,58,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,1,0,54,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,1,0,53,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,1,0,149,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,1,0,114,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,1,0,112,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,1,0,115,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,1,0,139,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,2,0,42,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,2,0,41,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,2,0,31,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,2,0,48,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,2,0,7,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,2,0,94,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,2,0,93,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,2,0,95,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,2,0,51,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,2,0,72,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,2,0,135,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,2,0,124,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,2,0,141,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,2,0,105,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,2,0,143,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,3,0,34,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,3,0,22,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,3,0,45,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,3,0,3,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,3,0,16,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,3,0,79,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,3,0,55,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,3,0,98,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,3,0,80,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,3,0,77,Iris-virginica,Iris-versicolor,0.0,0.0,1.0
+0,3,0,120,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,3,0,122,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,3,0,145,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,3,0,100,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,3,0,107,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,4,0,4,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,4,0,27,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,4,0,38,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,4,0,19,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,4,0,33,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,4,0,96,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,4,0,50,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,4,0,61,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,4,0,65,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,4,0,73,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,4,0,109,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,4,0,126,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,4,0,110,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,4,0,148,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,4,0,103,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,5,0,46,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,5,0,6,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,5,0,18,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,5,0,36,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,5,0,24,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,5,0,83,Iris-virginica,Iris-versicolor,0.0,0.0,1.0
+0,5,0,90,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,5,0,68,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,5,0,52,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,5,0,75,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,5,0,134,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,5,0,104,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,5,0,117,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,5,0,127,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,5,0,121,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,6,0,26,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,6,0,13,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,6,0,32,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,6,0,20,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,6,0,17,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,6,0,63,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,6,0,88,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,6,0,64,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,6,0,91,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,6,0,81,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,6,0,137,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,6,0,101,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,6,0,130,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,6,0,118,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,6,0,108,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,7,0,29,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,7,0,40,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,7,0,12,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,7,0,35,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,7,0,8,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,7,0,86,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,7,0,82,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,7,0,84,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,7,0,74,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,7,0,57,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,7,0,140,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,7,0,133,Iris-versicolor,Iris-virginica,0.0,1.0,0.0
+0,7,0,106,Iris-versicolor,Iris-virginica,0.0,1.0,0.0
+0,7,0,128,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,7,0,102,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,8,0,25,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,8,0,1,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,8,0,21,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,8,0,30,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,8,0,28,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,8,0,67,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,8,0,78,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,8,0,66,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,8,0,70,Iris-virginica,Iris-versicolor,0.0,0.0,1.0
+0,8,0,59,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,8,0,136,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,8,0,138,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,8,0,129,Iris-versicolor,Iris-virginica,0.0,1.0,0.0
+0,8,0,113,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,8,0,132,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,9,0,5,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,9,0,11,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,9,0,9,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,9,0,39,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,9,0,2,Iris-setosa,Iris-setosa,1.0,0.0,0.0
+0,9,0,85,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,9,0,56,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,9,0,69,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,9,0,71,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,9,0,60,Iris-versicolor,Iris-versicolor,0.0,1.0,0.0
+0,9,0,142,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,9,0,123,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,9,0,131,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,9,0,147,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+0,9,0,146,Iris-virginica,Iris-virginica,0.0,0.0,1.0
+
