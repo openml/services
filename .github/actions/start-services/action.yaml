@@ -23,7 +23,6 @@ runs:
         done
         SERVICES=$(echo "${{ inputs.services }}" | tr ',' ' ')
         docker compose $PROFILE_FLAGS up -d --build --wait $SERVICES
-      timeout-minutes: 10
 
     - name: Show service status
       if: always()
