@@ -13,6 +13,9 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Start services
         uses: ./.github/actions/start-services
         with:
@@ -28,11 +31,18 @@ jobs:
       - name: Dataset Processing
         run: bash scripts/wait_for_dataset.sh "${{ steps.dataset.outputs.id }}" 180
 
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --tail=50
+
   task-processing:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Start services
         uses: ./.github/actions/start-services
         with:
