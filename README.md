@@ -114,6 +114,20 @@ be slightly altered to use them in the test setup: change https to http.
 
 ## Development
 
+### Services
+When working on the `services` repository itself, the `scripts` directory provides a small number of integration tests to catch the most glaring issues. They are currently limited to REST API and evaluation engine functionality and also run automatically in CI.
+
+For example, after starting services, to test dataset upload run:
+```bash
+./scripts/upload_dataset.sh
+```
+If successful, this will also print the dataset id assigned to the new dataset.
+To test if dataset processing works, we can then run:
+```bash
+./scripts/wait_for_dataset.sh DATASET_ID
+```
+where `DATASET_ID` is replaced by the identifier printed in the previous step.
+
 ### PHP, Parquet and Croissant converter
 If you want to do local development on containers that are part of the docker-compose, you want those containers to change based on your code. You should have the relevant code somewhere on your system. You will need to tell the docker-compose where to find it. You can do so by setting environment variables.
 

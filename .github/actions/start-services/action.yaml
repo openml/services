@@ -1,0 +1,35 @@
+name: Start Services
+description: Start Docker Compose services
+
+inputs:
+  profiles:
+    description: "Comma-separated list of profiles to start (e.g. 'all' or 'rest-api,minio')"
+    required: false
+    default: "all"
+  services:
+    description: "Comma-separated list of specific services to start (e.g. 'database,elasticsearch')"
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Set permission for mount paths
+      shell: bash
+      run: |
+        chmod -R 777 ./data/php
+        chmod -R 777 ./logs
+    - name: Start services
+      shell: bash
+      run: |
+        PROFILE_FLAGS=""
+        for profile in $(echo "${{ inputs.profiles }}" | tr ',' ' '); do
+          PROFILE_FLAGS="$PROFILE_FLAGS --profile $profile"
+        done
+        SERVICES=$(echo "${{ inputs.services }}" | tr ',' ' ')
+        docker compose $PROFILE_FLAGS up -d --build --wait $SERVICES
+
+    - name: Show service status
+      if: always()
+      shell: bash
+      run: docker compose ps
