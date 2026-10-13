@@ -9,7 +9,7 @@ INTERVAL=5
 ELAPSED=0
 
 while [ "$ELAPSED" -lt "$TIMEOUT" ]; do
-  RESPONSE=$(curl -s "http://localhost:8000/api/v1/xml/run/${RUN_ID}")
+  RESPONSE=$(curl -sS "http://localhost:8000/api/v1/xml/run/${RUN_ID}")
 
   if echo "$RESPONSE" | grep -q "area_under_roc_curve"; then
     echo "Run $RUN_ID has evaluations."

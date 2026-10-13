@@ -9,11 +9,11 @@ INTERVAL=5
 ELAPSED=0
 
 while [ "$ELAPSED" -lt "$TIMEOUT" ]; do
-  RESPONSE=$(curl -s "http://localhost:8000/api/v1/xml/task/${TASK_ID}")
+  RESPONSE=$(curl -sS "http://localhost:8000/api/v1/xml/task/${TASK_ID}")
   SPLITS_URL=$(echo "$RESPONSE" | sed -n 's/.*<oml:data_splits_url>\(.*\)<\/oml:data_splits_url>.*/\1/p')
 
   if [ -n "$SPLITS_URL" ]; then
-    SPLITS_RESPONSE=$(curl -s -w "\n%{http_code}" "$SPLITS_URL")
+    SPLITS_RESPONSE=$(curl -sS -w "\n%{http_code}" "$SPLITS_URL")
     STATUS_CODE=$(echo "$SPLITS_RESPONSE" | tail -n1)
     SPLITS_BODY=$(echo "$SPLITS_RESPONSE" | sed '$d')
     if [ "$STATUS_CODE" = "200" ]; then

@@ -23,7 +23,7 @@ TMPFILE=$(mktemp /tmp/dataset_desc.XXXXXX.xml)
 trap 'rm -f "$TMPFILE"' EXIT
 echo "$XML_DESCRIPTION" > "$TMPFILE"
 
-RESPONSE=$(curl -s -X POST "http://localhost:8000/api/v1/xml/data?api_key=normaluser" \
+RESPONSE=$(curl -sS -X POST "http://localhost:8000/api/v1/xml/data?api_key=normaluser" \
   -F "description=@${TMPFILE};type=text/xml" \
   -F "dataset=@${SCRIPT_DIR}/data/test.arff")
 

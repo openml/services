@@ -9,7 +9,7 @@ INTERVAL=5
 ELAPSED=0
 
 while [ "$ELAPSED" -lt "$TIMEOUT" ]; do
-  STATUS_RESPONSE=$(curl -s "http://localhost:8000/api/v1/xml/data/${DATASET_ID}")
+  STATUS_RESPONSE=$(curl -sS "http://localhost:8000/api/v1/xml/data/${DATASET_ID}")
   STATUS=$(echo "$STATUS_RESPONSE" | sed -n 's/.*<oml:status>\([a-zA-Z_]*\)<\/oml:status>.*/\1/p')
 
   echo "Status after ${ELAPSED}s: ${STATUS:-unknown}"

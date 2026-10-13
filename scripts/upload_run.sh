@@ -5,7 +5,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-RESPONSE=$(curl -s -X POST "http://localhost:8000/api/v1/xml/run?api_key=normaluser" \
+RESPONSE=$(curl -sS -X POST "http://localhost:8000/api/v1/xml/run?api_key=normaluser" \
   -F "description=@${SCRIPT_DIR}/data/run/description.xml;type=text/xml" \
   -F "predictions=@${SCRIPT_DIR}/data/run/predictions.arff")
 

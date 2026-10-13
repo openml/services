@@ -19,7 +19,7 @@ cat > "$TMPFILE" << EOF
 </oml:task_inputs>
 EOF
 
-RESPONSE=$(curl -s -X POST "http://localhost:8000/api/v1/xml/task?api_key=normaluser" \
+RESPONSE=$(curl -sS -X POST "http://localhost:8000/api/v1/xml/task?api_key=normaluser" \
   -F "description=@${TMPFILE};type=text/xml")
 
 TASK_ID=$(echo "$RESPONSE" | sed -n 's/.*<oml:id>\([0-9]*\)<\/oml:id>.*/\1/p')
