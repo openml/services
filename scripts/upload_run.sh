@@ -9,7 +9,7 @@ RESPONSE=$(curl -s -X POST "http://localhost:8000/api/v1/xml/run?api_key=normalu
   -F "description=@${SCRIPT_DIR}/data/run/description.xml;type=text/xml" \
   -F "predictions=@${SCRIPT_DIR}/data/run/predictions.arff")
 
-RUN_ID=$(echo "$RESPONSE" | sed -n 's/.*<oml:id>\([0-9]*\)<\/oml:id>.*/\1/p')
+RUN_ID=$(echo "$RESPONSE" | sed -n 's/.*<oml:run_id>\([0-9]*\)<\/oml:run_id>.*/\1/p')
 
 if [ -z "$RUN_ID" ]; then
   echo "Server response:" >&2
