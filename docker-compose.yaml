@@ -48,6 +48,17 @@ services:
           cpus: '0.2'
           memory: 250M
 
+  elasticsearch-indexer:
+    profiles: ["all", "rest-api", "frontend", "elasticsearch"]
+    image: openml/php-rest-api:v1.2.11a
+    container_name: "openml-elasticsearch-indexer"
+    env_file: config/php/.env
+    environment:
+      INDEX_ES: true
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
   nginx:
     profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     build:
@@ -149,6 +160,8 @@ services:
     depends_on:
       php-api:
         condition: service_healthy
+      elasticsearch-indexer:
+        condition: service_completed_successfully
 
   minio:
     profiles: ["all", "minio", "rest-api", "evaluation-engine"]
