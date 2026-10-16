@@ -128,6 +128,10 @@ To test if dataset processing works, we can then run:
 ```
 where `DATASET_ID` is replaced by the identifier printed in the previous step.
 
+It is also possible to run the php-api without elasticsearch, this is useful to avoid the considerable overhead of starting the elasticsearch container and creating indices.
+First, ensure that `INDEX_ES_DURING_STARTUP=false` in `config/php/.env` otherwise it will try to connect to elasticsearch and fail.
+Then explicitly specify the compose file so that the `docker-compose.override.yaml` file will be ignored: `docker compose -f docker-compose.yaml php-api -d`.
+
 ### PHP, Parquet and Croissant converter
 If you want to do local development on containers that are part of the docker-compose, you want those containers to change based on your code. You should have the relevant code somewhere on your system. You will need to tell the docker-compose where to find it. You can do so by setting environment variables.
 

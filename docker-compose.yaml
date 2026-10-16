@@ -67,9 +67,9 @@ services:
     ports:
       - "8080:80"  # also known as /api (nginx)
     env_file: config/php/.env
+    environment:
+      ES_ENABLED: false
     depends_on:
-      elasticsearch:
-        condition: service_healthy
       database-setup:
         condition: service_completed_successfully
     volumes:

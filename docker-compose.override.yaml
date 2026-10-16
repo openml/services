@@ -1,0 +1,10 @@
+services:
+  php-api:
+    environment:
+      ES_ENABLED: true
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+
+
