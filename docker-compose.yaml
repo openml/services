@@ -50,7 +50,7 @@ services:
 
   elasticsearch-indexer:
     profiles: ["all", "rest-api", "frontend", "elasticsearch"]
-    image: openml/php-rest-api:v1.2.11a
+    image: openml/php-rest-api:v1.2.11
     container_name: "openml-elasticsearch-indexer"
     env_file: config/php/.env
     environment:
@@ -75,7 +75,7 @@ services:
 
   php-api:
     profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api:v1.2.11a
+    image: openml/php-rest-api:v1.2.11
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
