@@ -58,6 +58,8 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
+      database-setup:
+        condition: service_completed_successfully
 
   nginx:
     profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
