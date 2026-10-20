@@ -25,7 +25,7 @@ services:
         condition: service_healthy
 
   elasticsearch:
-    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
+    profiles: ["all", "object-storage", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23  # This version is not available on arm. Newer version do not play well with the PHP code. See https://github.com/openml/OpenML/tree/feature/elasticsearch8
     container_name: "openml-elasticsearch"
     platform: "linux/amd64"
@@ -49,7 +49,7 @@ services:
           memory: 250M
 
   nginx:
-    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
+    profiles: ["all", "object-storage", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     build:
       context: config/nginx
     container_name: openml-nginx
@@ -61,7 +61,7 @@ services:
 
 
   php-api:
-    profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
+    profiles: ["all", "object-storage", "rest-api", "frontend", "evaluation-engine"]
     image: openml/php-rest-api:v1.2.10
     container_name: "openml-php-rest-api"
     ports:
@@ -118,10 +118,10 @@ services:
         condition: service_completed_successfully
       php-api:
         condition: service_healthy  # used for serving arff files
-      minio:
+      object-storage:
         condition: service_started  # used for serving parquet files
       nginx:
-        condition: service_started  # used for routing to MinIO and PHP REST API
+        condition: service_started  # used for routing, to the object-storage and PHP REST API
 
   email-server:
     profiles: ["all", "frontend"]
@@ -150,19 +150,16 @@ services:
       php-api:
         condition: service_healthy
 
-  minio:
-    profiles: ["all", "minio", "rest-api", "evaluation-engine"]
-    image: openml/test-minio:v0.1.20260204
-    container_name: "openml-minio"
+  object-storage:
+    profiles: ["all", "object-storage", "rest-api", "evaluation-engine"]
+    image: openml/seaweedfs-with-datasets:v0.0.1
+    container_name: "openml-object-storage"
     ports:
-      - "9000:9000"  # also known as /data (nginx)
-      - "9001:9001"
-    env_file: config/minio/.env
-    command: >
-      server /export --console-address ":9001"
+      - "8333:8333"  # also known as /s3 (nginx)
+      - "8888:8888"
 
   arff-to-pq:
-    profiles: ["all", "minio"]
+    profiles: ["all", "object-storage"]
     build:
       context: config/arff-to-pq-converter
     image: openml-arff-to-pq-converter-cron
