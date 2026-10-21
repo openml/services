@@ -25,7 +25,7 @@ services:
         condition: service_healthy
 
   elasticsearch:
-    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
+    profiles: ["all", "elasticsearch"]
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23  # This version is not available on arm. Newer version do not play well with the PHP code. See https://github.com/openml/OpenML/tree/feature/elasticsearch8
     container_name: "openml-elasticsearch"
     platform: "linux/amd64"
@@ -50,10 +50,11 @@ services:
 
   elasticsearch-indexer:
     profiles: ["elasticsearch"]
-    image: openml/php-rest-api:v1.2.11
+    image: openml/php-rest-api:v1.3.0
     container_name: "openml-elasticsearch-indexer"
     env_file: config/php/.env
     environment:
+      ES_ENABLED: true
       INDEX_ES: true
     depends_on:
       elasticsearch:
@@ -74,14 +75,12 @@ services:
 
 
   php-api:
-    profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api:v1.2.11
+    profiles: ["all", "rest-api", "minio"]
+    image: openml/php-rest-api:v1.3.0
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
     env_file: config/php/.env
-    environment:
-      ES_ENABLED: false
     depends_on:
       database-setup:
         condition: service_completed_successfully
