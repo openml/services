@@ -59,10 +59,9 @@ services:
       default:
         ipv4_address: 172.28.0.2
 
-
   php-api:
     profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api:v1.2.10
+    image: openml/php-rest-api:v1.3.0
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
@@ -84,6 +83,19 @@ services:
       interval: 1m
     extra_hosts:
       - "localhost=172.28.0.2"
+
+
+  php-api-es-index:
+    profiles: ["all", "frontend", "evaluation-engine", "elasticsearch"]
+    image: openml/php-rest-api:v1.3.0
+    container_name: "openml-php-rest-api-es-index"
+    env_file: config/php/.env
+    environment:
+      ES_ENABLED: true
+      INDEX_ES: true
+    depends_on:
+      php-api:
+        condition: service_healthy
 
   # The Python based REST API is set to replace the PHP based REST API
   # The 'light' profile can be used to test most of the REST API 
