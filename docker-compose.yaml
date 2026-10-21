@@ -49,7 +49,7 @@ services:
           memory: 250M
 
   elasticsearch-indexer:
-    profiles: ["all", "rest-api", "frontend", "elasticsearch"]
+    profiles: ["elasticsearch"]
     image: openml/php-rest-api:v1.2.11
     container_name: "openml-elasticsearch-indexer"
     env_file: config/php/.env
