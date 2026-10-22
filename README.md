@@ -47,8 +47,8 @@ You can use different profiles:
 - `"elasticsearch"`: databases + nginx + elasticsearch
 - `"rest-api"`: databases + nginx + elasticsearch + REST API
 - `"frontend"`: databases + nginx + elasticsearch + REST API + frontend + email-server
-- `"minio"`: databases + nginx + elasticsearch + REST APP + MinIO + parquet and croissant conversion
-- `"evaluation-engine"`: databases + nginx + elastichsearc + REST API + MinIO + evaluation engine
+- `"minio"`: databases + nginx + elasticsearch +  REST APP + MinIO + parquet and croissant conversion
+- `"evaluation-engine"`: databases + nginx + elasticsearch + REST API + MinIO + evaluation engine
 - `"all"`: everything
 
 Usage examples:
@@ -68,6 +68,11 @@ docker compose down
 ```
 While it is up, the API is available under `http://localhost:8082`, e.g., `http://localhost:8082/datasets/1`.
 
+Similarly, you can start the php-api directly without a profile to start it without elasticsearch:
+```bash
+docker compose up php-api -d
+docker compose down
+```
 
 ## Known issues
 See the Github Issue list for the known issues.
@@ -127,10 +132,6 @@ To test if dataset processing works, we can then run:
 ./scripts/wait_for_dataset.sh DATASET_ID
 ```
 where `DATASET_ID` is replaced by the identifier printed in the previous step.
-
-It is also possible to run the php-api without elasticsearch, this is useful to avoid the considerable overhead of starting the elasticsearch container and creating indices.
-First, ensure that `INDEX_ES_DURING_STARTUP=false` in `config/php/.env` otherwise it will try to connect to elasticsearch and fail.
-Then explicitly specify the compose file so that the `docker-compose.override.yaml` file will be ignored: `docker compose -f docker-compose.yaml php-api -d`.
 
 ### PHP, Parquet and Croissant converter
 If you want to do local development on containers that are part of the docker-compose, you want those containers to change based on your code. You should have the relevant code somewhere on your system. You will need to tell the docker-compose where to find it. You can do so by setting environment variables.
