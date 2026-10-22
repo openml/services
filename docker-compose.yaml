@@ -1,3 +1,8 @@
+x-php-image: &php-image
+  image: openml/php-rest-api:v1.3.0
+  env_file: config/php/.env
+
+
 services:
   database:
     image: "openml/test-database:v0.1.20260204"
@@ -48,6 +53,19 @@ services:
           cpus: '0.2'
           memory: 250M
 
+  elasticsearch-indexer:
+    profiles: ["all", "frontend", "elasticsearch"]
+    <<: *php-image
+    container_name: "openml-elasticsearch-indexer"
+    environment:
+      ES_ENABLED: true
+      INDEX_ES: true
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      database-setup:
+        condition: service_completed_successfully
+
   nginx:
     profiles: ["all", "object-storage", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     build:
@@ -61,14 +79,11 @@ services:
 
 
   php-api:
-    profiles: ["all", "object-storage", "rest-api", "frontend", "evaluation-engine"]
-    image: openml/php-rest-api:v1.2.10
+    profiles: ["all", "rest-api", "object-storage"]
+    <<: *php-image
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
-    env_file: config/php/.env
-    environment:
-      ES_ENABLED: false
     depends_on:
       database-setup:
         condition: service_completed_successfully
