@@ -45,10 +45,10 @@ You can use different profiles:
 
 - `[no profile]`: databases
 - `"elasticsearch"`: databases + nginx + elasticsearch
-- `"rest-api"`: databases + nginx + REST API
+- `"rest-api"`: databases + nginx + elasticsearch + REST API
 - `"frontend"`: databases + nginx + elasticsearch + REST API + frontend + email-server
-- `"minio"`: databases + nginx +  REST APP + MinIO + parquet and croissant conversion
-- `"evaluation-engine"`: databases + nginx + REST API + MinIO + evaluation engine
+- `"minio"`: databases + nginx + elasticsearch +  REST APP + MinIO + parquet and croissant conversion
+- `"evaluation-engine"`: databases + nginx + elasticsearch + REST API + MinIO + evaluation engine
 - `"all"`: everything
 
 Usage examples:
