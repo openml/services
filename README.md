@@ -28,7 +28,7 @@ chown -R www-data:www-data data/php
 # Or, if previous fails, for instance because `www-data` does not exist:
 chmod -R 777 data/php
 ```
-This is necessary to make sure that you can upload datasets, tasks and runs. Note that the dataset data is meant to be public anyway, so a 777 should not be problematic. This step won't be necessary anymore once the backend stores its files on MinIO.
+This is necessary to make sure that you can upload datasets, tasks and runs. Note that the dataset data is meant to be public anyway, so a 777 should not be problematic. This step won't be necessary anymore once the backend stores its files on the S3 object storage.
 
 
 You run all OpenML services locally using
@@ -47,8 +47,8 @@ You can use different profiles:
 - `"elasticsearch"`: databases + nginx + elasticsearch
 - `"rest-api"`: databases + nginx + elasticsearch + REST API
 - `"frontend"`: databases + nginx + elasticsearch + REST API + frontend + email-server
-- `"minio"`: databases + nginx + elasticsearch +  REST APP + MinIO + parquet and croissant conversion
-- `"evaluation-engine"`: databases + nginx + elasticsearch + REST API + MinIO + evaluation engine
+- `"object-storage`: databases + nginx + elasticsearch +  REST APP + object storage + parquet and croissant conversion
+- `"evaluation-engine"`: databases + nginx + elasticsearch + REST API + object storage + evaluation engine
 - `"all"`: everything
 
 Usage examples:
@@ -94,7 +94,7 @@ When you spin up the docker-compose, you'll get these endpoints:
 - *Database*: localhost:3306, filled with test data.
 - *ElasticSearch*: localhost:9200 or localhost:8000/es, filled with test data.
 - *Rest API*: localhost:8080
-- *Minio*: console at localhost:9001, filled with test data.
+- *Object Storage*: console at localhost:8888, filled with test data; S3 endpoint on localhost:8333 and localhost:8000/s3
 
 ## Connect to specific container
 
@@ -109,7 +109,7 @@ docker exec -it openml-test-database mysql -uroot -p -d openml_expdb
 ```
 
 ## Credentials
-The credentials for the database can be found in `config/database/.env`, for minio in `config/minio/.env`, etc.
+The credentials for the database can be found in `config/database/.env`, for elasticsearch in `config/elasticsearch/.env`, etc. As exception, the credentials for the object storage are baked into the pre-filled test image, and can be found in `config/arff-to-pq-converter/.env`.
 
 ## Emails
 The email-server is used for emails from the frontend. For example, if you create a new user, an 
@@ -152,8 +152,8 @@ Run docker compose with profile `rest-api` (or `all`) to start the PHP container
 
 #### Parquet
 ```bash
-ARFF_TO_PQ_CODE_DIR=/path/to/minio-data       # Root of https://github.com/openml-labs/minio-data on your computer
-ARFF_TO_PQ_APP=/app                           # Always set this to /app. Leave empty if you leave ARFF_TO_PQ_CODE_DIR empty
+ARFF_TO_PQ_CODE_DIR=/path/to/opeml-scripts/arff-to-pq     # The arff-to-pq directory of https://github.com/openml/scripts on your computer
+ARFF_TO_PQ_APP=/app                                       # Always set this to /app. Leave empty if you leave ARFF_TO_PQ_CODE_DIR empty
 ```
 
 #### Croissant
