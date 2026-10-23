@@ -195,13 +195,13 @@ services:
 
   croissants:
     profiles: ["all"]
-    image: "openml/croissant-converter:v1.4.2"
+    image: "openml/croissant-converter:v1.5.0"
     container_name: "openml-croissant-converter"
     env_file: config/croissant-converter/.env
     ports:
       - "8001:8001"
     command: >
-      web_api.py --host "0.0.0.0" --port 8001
+      web_api.py --host "0.0.0.0" --port 8001 --s3-server http://object-storage:8333/
 
   evaluation-engine:
     profiles: ["all", "evaluation-engine"]
