@@ -31,7 +31,7 @@ assert_url_exists() {
 HOME_PAGE=$(curl -s http://localhost:8000)
 assert_contains "$HOME_PAGE" "OpenML is an open platform for sharing datasets"
 
-DATASET_URL=http://localhost:8000/minio/datasets/0000/0020/dataset_37_diabetes.arff
+DATASET_URL=http://localhost:8000/s3/datasets/0000/0020/dataset_37_diabetes.arff
 DESCRIPTION_URL=http://localhost:8000/api/v1/json/data/20
 
 # The JSON response may contain escaped slashes (e.g. http:\/\/), so strip them
@@ -121,7 +121,7 @@ fi
 
 echo "Checking parquet conversion"
 PADDED_ID=$(printf "%04d" "$DATA_ID")
-NEW_PARQUET_URL="http://localhost:8000/minio/datasets/0000/${PADDED_ID}/dataset_${DATA_ID}.pq"
+NEW_PARQUET_URL="http://localhost:8000/s3/datasets/0000/${PADDED_ID}/dataset_${DATA_ID}.pq"
 wget "$NEW_PARQUET_URL" 
 DATA_SHAPE=$(.venv/bin/python -c "import pandas as pd; df = pd.read_parquet(\"dataset_${DATA_ID}.pq\"); print(df.shape)")
 assert_contains "${DATA_SHAPE}" "(3, 4)"
