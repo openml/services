@@ -49,6 +49,7 @@ You can use different profiles:
 - `"frontend"`: databases + nginx + elasticsearch + REST API + frontend + email-server
 - `"minio"`: databases + nginx + elasticsearch +  REST APP + MinIO + parquet and croissant conversion
 - `"evaluation-engine"`: databases + nginx + elasticsearch + REST API + MinIO + evaluation engine
+- `"client-ci"`: minimal set of services to test all api client-server interactions. 
 - `"all"`: everything
 
 Usage examples:
