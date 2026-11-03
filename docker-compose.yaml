@@ -66,7 +66,7 @@ services:
         condition: service_completed_successfully
 
   nginx:
-    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
+    profiles: ["all", "client-ci", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     build:
       context: config/nginx
     container_name: openml-nginx
@@ -78,7 +78,7 @@ services:
 
 
   php-api:
-    profiles: ["all", "minio", "rest-api", "frontend", "evaluation-engine"]
+    profiles: ["all", "client-ci", "minio", "rest-api", "frontend", "evaluation-engine"]
     <<: *php-image
     container_name: "openml-php-rest-api"
     ports:
@@ -124,7 +124,7 @@ services:
       interval: 1m
 
   python-api:
-    profiles: ["all", "rest-api"]
+    profiles: ["all", "rest-api", "client-ci"]
     container_name: "openml-python-rest-api"
     extends: python-api-light
     depends_on:
@@ -167,7 +167,7 @@ services:
         condition: service_completed_successfully
 
   minio:
-    profiles: ["all", "minio", "rest-api", "evaluation-engine"]
+    profiles: ["all", "minio", "rest-api", "client-ci", "evaluation-engine"]
     image: openml/test-minio:v0.1.20260204
     container_name: "openml-minio"
     ports:
@@ -207,7 +207,7 @@ services:
       web_api.py --host "0.0.0.0" --port 8001
 
   evaluation-engine:
-    profiles: ["all", "evaluation-engine"]
+    profiles: ["all", "evaluation-engine", "client-ci"]
     build:
       context: config/evaluation-engine
     container_name: openml-evaluation-engine
