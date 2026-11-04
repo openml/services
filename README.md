@@ -47,8 +47,9 @@ You can use different profiles:
 - `"elasticsearch"`: databases + nginx + elasticsearch
 - `"rest-api"`: databases + nginx + elasticsearch + REST API
 - `"frontend"`: databases + nginx + elasticsearch + REST API + frontend + email-server
-- `"object-storage`: databases + nginx + elasticsearch +  REST APP + object storage + parquet and croissant conversion
-- `"evaluation-engine"`: databases + nginx + elasticsearch + REST API + object storage + evaluation engine
+- `"object-storage"`: databases + nginx + elasticsearch + REST APP + object storage + parquet and croissant conversion
+- `"evaluation-engine"`: databases + nginx + elasticsearch + REST API + MinIO + evaluation engine
+- `"client-ci"`: minimal set of services to test all api client-server interactions. 
 - `"all"`: everything
 
 Usage examples:
