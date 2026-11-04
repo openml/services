@@ -3,7 +3,7 @@ description: Start Docker Compose services
 
 inputs:
   profiles:
-    description: "Comma-separated list of profiles to start (e.g. 'all' or 'rest-api,minio')"
+    description: "Comma-separated list of profiles to start (e.g. 'all' or 'rest-api,object-storage')"
     required: false
     default: "all"
   services:

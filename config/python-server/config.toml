@@ -1,5 +1,5 @@
 arff_base_url="http://localhost:8000"
-minio_base_url="http://localhost:8000/minio"
+minio_base_url="http://localhost:8000/s3"
 
 [fastapi]
 root_path=""
@@ -17,5 +17,5 @@ database="openml_expdb"
 database="openml"
 
 [routing]
-minio_url="http://localhost:8000/minio/"
+minio_url="http://localhost:8000/s3/"
 server_url="http://localhost:8000/"
