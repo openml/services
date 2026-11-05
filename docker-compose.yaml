@@ -48,6 +48,33 @@ services:
           cpus: '0.2'
           memory: 250M
 
+  es9:
+    profiles: ["es9"]
+    container_name: "es9"
+    image:  docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.3.3
+    ports:
+      - "9201:9200"
+      - "9301:9300"
+    env_file: config/elasticsearch/.env
+    healthcheck:
+      test: curl 127.0.0.1:9200/_cluster/health | grep -e "green"
+      start_period: 30s
+      start_interval: 5s
+      timeout: 3s
+      interval: 10s
+
+  logstash:
+    profiles: ["es9"]
+    image: openml-logstash
+    build:
+      context: config/logstash/
+      dockerfile: Dockerfile
+    env_file: config/logstash/.env
+    volumes:
+      - ./config/logstash/pipeline/:/usr/share/logstash/pipeline/
+      - ./config/logstash/pipeline/queries/:/usr/share/logstash/pipeline/queries/
+      - ./config/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+
   nginx:
     profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     build:
