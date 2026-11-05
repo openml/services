@@ -57,7 +57,9 @@ services:
       - "9301:9300"
     env_file: config/elasticsearch/.env
     healthcheck:
-      test: curl 127.0.0.1:9200/_cluster/health | grep -e "green"
+      # health check can be set back to green when we make indices explicitly
+      # with number of replicas set to 0
+      test: curl 127.0.0.1:9200/_cluster/health | grep -e "green\|yellow"
       start_period: 30s
       start_interval: 5s
       timeout: 3s

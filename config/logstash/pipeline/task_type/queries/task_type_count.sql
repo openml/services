@@ -1,5 +1,5 @@
   SELECT 
-    tt.ttid, 
+    tt.ttid as tt_id, 
     (
       SELECT COUNT(*)
       FROM task
