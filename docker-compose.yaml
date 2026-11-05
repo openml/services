@@ -48,9 +48,9 @@ services:
           cpus: '0.2'
           memory: 250M
 
-  es9:
+  elasticsearch9:
     profiles: ["es9"]
-    container_name: "es9"
+    container_name: "openml-elasticsearch9"
     image:  docker.elastic.co/elasticsearch/elasticsearch-wolfi:9.3.3
     ports:
       - "9201:9200"
@@ -75,7 +75,7 @@ services:
       - ./config/logstash/pipeline/queries/:/usr/share/logstash/pipeline/queries/
       - ./config/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
     depends_on:
-      es9:
+      elasticsearch9:
         condition: service_healthy
       database-setup:
         condition: service_completed_successfully
