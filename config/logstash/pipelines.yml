@@ -1,3 +1,7 @@
 # https://www.elastic.co/docs/reference/logstash/multiple-pipelines
-- pipeline.id: study
-  path.config: "/usr/share/logstash/pipeline/study.conf"
+#- pipeline.id: study
+#  path.config: "/usr/share/logstash/pipeline/study.conf"
+- pipeline.id: task_study_creation
+  path.config: "/usr/share/logstash/pipeline/task_type/task_type.conf"
+- pipeline.id: task_study_task_count_update
+  path.config: "/usr/share/logstash/pipeline/task_type/task_type_count.conf"
