@@ -82,6 +82,10 @@ services:
       - ./config/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
     depends_on:
       elasticsearch9:
+        condition: service_healthy
+      database-setup:
+        condition: service_completed_successfully
+
 
   elasticsearch-indexer:
     profiles: ["all", "object-storage", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
