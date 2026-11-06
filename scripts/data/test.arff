@@ -1,0 +1,14 @@
+@RELATION test-dataset
+@ATTRIBUTE foo NUMERIC
+@ATTRIBUTE bar NUMERIC
+@ATTRIBUTE bazz NUMERIC
+@ATTRIBUTE class {'a', 'b'}
+@DATA
+0,0,0,'a'
+0,0,1,'a'
+0,1,0,'a'
+0,1,1,'a'
+1,0,0,'b'
+1,0,1,'b'
+1,1,0,'b'
+1,1,1,'b'

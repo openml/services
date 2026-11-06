@@ -28,7 +28,7 @@ chown -R www-data:www-data data/php
 # Or, if previous fails, for instance because `www-data` does not exist:
 chmod -R 777 data/php
 ```
-This is necessary to make sure that you can upload datasets, tasks and runs. Note that the dataset data is meant to be public anyway, so a 777 should not be problematic. This step won't be necessary anymore once the backend stores its files on MinIO.
+This is necessary to make sure that you can upload datasets, tasks and runs. Note that the dataset data is meant to be public anyway, so a 777 should not be problematic. This step won't be necessary anymore once the backend stores its files on the S3 object storage.
 
 
 You run all OpenML services locally using
@@ -47,8 +47,9 @@ You can use different profiles:
 - `"elasticsearch"`: databases + nginx + elasticsearch
 - `"rest-api"`: databases + nginx + elasticsearch + REST API
 - `"frontend"`: databases + nginx + elasticsearch + REST API + frontend + email-server
-- `"minio"`: databases + nginx + elasticsearch + REST APP + MinIO + parquet and croissant conversion
-- `"evaluation-engine"`: databases + nginx + elastichsearc + REST API + MinIO + evaluation engine
+- `"object-storage"`: databases + nginx + elasticsearch + REST APP + object storage + parquet and croissant conversion
+- `"evaluation-engine"`: databases + nginx + elasticsearch + REST API + MinIO + evaluation engine
+- `"client-ci"`: minimal set of services to test all api client-server interactions. 
 - `"all"`: everything
 
 Usage examples:
@@ -59,6 +60,20 @@ docker compose --profile frontend up -d  # Frontend, rest-api, elasticsearch and
 ```
 Use the same profile for your `down` command.
 
+The Python REST API is also available in a 'light' mode that allows for database interactions
+but does not allow for file uploads/downloads. It has to be started directly (as opposed to
+through a profile):
+```bash
+docker compose up python-api-light -d
+docker compose down
+```
+While it is up, the API is available under `http://localhost:8082`, e.g., `http://localhost:8082/datasets/1`.
+
+Similarly, you can start the php-api directly without a profile to start it without elasticsearch:
+```bash
+docker compose up php-api -d
+docker compose down
+```
 
 ## Known issues
 See the Github Issue list for the known issues.
@@ -80,10 +95,22 @@ When you spin up the docker-compose, you'll get these endpoints:
 - *Database*: localhost:3306, filled with test data.
 - *ElasticSearch*: localhost:9200 or localhost:8000/es, filled with test data.
 - *Rest API*: localhost:8080
-- *Minio*: console at localhost:9001, filled with test data.
+- *Object Storage*: console at localhost:8888, filled with test data; S3 endpoint on localhost:8333 and localhost:8000/s3
+
+## Connect to specific container
+
+You can connect to specific images by using the following command:
+```
+docker exec -it <name of container> <command>
+```
+
+This means that the following command would create an iterative (`-it`) session on container `openml-test-database` using the command `mysql -uroot -p -d openml_expdb`:
+```
+docker exec -it openml-test-database mysql -uroot -p -d openml_expdb
+```
 
 ## Credentials
-The credentials for the database can be found in `config/database/.env`, for minio in `config/minio/.env`, etc.
+The credentials for the database can be found in `config/database/.env`, for elasticsearch in `config/elasticsearch/.env`, etc. As exception, the credentials for the object storage are baked into the pre-filled test image, and can be found in `config/arff-to-pq-converter/.env`.
 
 ## Emails
 The email-server is used for emails from the frontend. For example, if you create a new user, an 
@@ -93,10 +120,24 @@ be slightly altered to use them in the test setup: change https to http.
 
 ## Development
 
-### PHP, Parquet and Croissant converter
-If you want to do local development on containers that are part of the docker-compose, you want those containers to change based on your code. You should have the relevant code somewhere on your system, you only need to tell the docker-compose where to find it. You can do so by setting environment variables. 
+### Services
+When working on the `services` repository itself, the `scripts` directory provides a small number of integration tests to catch the most glaring issues. They are currently limited to REST API and evaluation engine functionality and also run automatically in CI.
 
-Create a `.env` file inside this directory, and set:
+For example, after starting services, to test dataset upload run:
+```bash
+./scripts/upload_dataset.sh
+```
+If successful, this will also print the dataset id assigned to the new dataset.
+To test if dataset processing works, we can then run:
+```bash
+./scripts/wait_for_dataset.sh DATASET_ID
+```
+where `DATASET_ID` is replaced by the identifier printed in the previous step.
+
+### PHP, Parquet and Croissant converter
+If you want to do local development on containers that are part of the docker-compose, you want those containers to change based on your code. You should have the relevant code somewhere on your system. You will need to tell the docker-compose where to find it. You can do so by setting environment variables.
+
+Create a new `.env` file inside this root directory, and set the following values depending on what development you are doing:
 
 #### PHP
 ```bash
@@ -104,12 +145,16 @@ PHP_CODE_DIR=/path/to/OpenML                  # Root of https://github.com/openm
 PHP_CODE_VAR_WWW_OPENML=/var/www/openml       # Always set this to /var/www/openml. Leave empty if you leave PHP_CODE_DIR empty
 ```
 
-Make sure to create `openml_OS/config/BASE_CONFIG.php` in your local `$PHP_CODE_DIR`. The correct configuration can be found in `config/php.env`. Run docker compose with profile `rest-api`.
+Important: 
+Make sure to create `openml_OS/config/BASE_CONFIG.php` in your local `$PHP_CODE_DIR`.
+You can copy `openml_OS/config/BASE_CONFIG-BLANK.php` into `openml_OS/config/BASE_CONFIG.php` directly and leave all values as is. All needed values are filled in at startup time for the container.
+
+Run docker compose with profile `rest-api` (or `all`) to start the PHP container.
 
 #### Parquet
 ```bash
-ARFF_TO_PQ_CODE_DIR=/path/to/minio-data       # Root of https://github.com/openml-labs/minio-data on your computer
-ARFF_TO_PQ_APP=/app                           # Always set this to /app. Leave empty if you leave ARFF_TO_PQ_CODE_DIR empty
+ARFF_TO_PQ_CODE_DIR=/path/to/opeml-scripts/arff-to-pq     # The arff-to-pq directory of https://github.com/openml/scripts on your computer
+ARFF_TO_PQ_APP=/app                                       # Always set this to /app. Leave empty if you leave ARFF_TO_PQ_CODE_DIR empty
 ```
 
 #### Croissant
