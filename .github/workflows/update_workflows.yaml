@@ -1,0 +1,37 @@
+name: release-docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-openml-python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out openml/openml-python
+        uses: actions/checkout@v4
+        with:
+          repository: openml/openml-python
+          token: ${{ secrets.OPENML_PYTHON_PAT }}
+
+      - name: Update pinned service commit hash
+        run: | 
+          sed -i -E "/openml\/services/s/[a-f0-9]{40}/${{ github.sha }}/" .github/workflows/test.yml
+
+      - name: Abort if nothing changed
+        run: |
+          git diff --quiet -- .github/workflows/test.yml && { echo "No changes detected."; exit 1; }
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.OPENML_PYTHON_PAT}}
+          commit-message: "Pin services to ${{ github.sha }}"
+          title: "[bot] Pin services in `test.yml` to ${{ github.sha }}"
+          branch: "pin-services-${{ github.sha }}"
+          body: |
+            Automated update of the pinned commit of services in the `test.yml` workflow to commit `${{ github.sha }}`.
+            Triggered by push to main in [openml/services](https://github.com/openml/OpenML).
+          base: main
