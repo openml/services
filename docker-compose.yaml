@@ -77,8 +77,8 @@ services:
       dockerfile: Dockerfile
     env_file: config/logstash/.env
     volumes:
-      - ./config/logstash/pipeline/:/usr/share/logstash/pipeline/
-      - ./config/logstash/pipeline/queries/:/usr/share/logstash/pipeline/queries/
+      - ./config/logstash/pipelines/:/usr/share/logstash/pipelines/
+      - ./config/logstash/queries/:/usr/share/logstash/queries/
       - ./config/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
     depends_on:
       elasticsearch9:
