@@ -1,0 +1,305 @@
+<oml:run xmlns:oml="http://openml.org/openml">
+	<oml:task_id>1196</oml:task_id>
+	<oml:flow_id>1</oml:flow_id>
+	<oml:setup_string>Python_3.10.16. Sklearn_1.6.1. NumPy_2.2.2. SciPy_1.15.1.</oml:setup_string>
+  <oml:parameter_setting>
+        <oml:name>-do-not-check-capabilities</oml:name>
+        <oml:value></oml:value>
+  </oml:parameter_setting>
+  <oml:parameter_setting>
+        <oml:name>batch-size</oml:name>
+        <oml:value>100</oml:value>
+  </oml:parameter_setting>
+  <oml:parameter_setting>
+        <oml:name>num-decimal-places</oml:name>
+        <oml:value>2</oml:value>
+  </oml:parameter_setting>
+  <oml:parameter_setting>
+        <oml:name>output-debug-info</oml:name>
+        <oml:value></oml:value>
+  </oml:parameter_setting>
+	<oml:tag>openml-python</oml:tag>
+	<oml:tag>Sklearn_1.6.1.</oml:tag>
+	<oml:output_data>
+		<oml:evaluation repeat="0" fold="0">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>11.353665999999762</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="1">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.2970839999999484</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="2">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.1723329999995258</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="3">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.1706670000002362</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="4">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.2168329999999727</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="5">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.226291000000046</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="6">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.2974170000008556</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="7">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.2798339999999797</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="8">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.1370409999997833</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="9">
+			<oml:name>usercpu_time_millis_training</oml:name>
+			<oml:value>1.3173340000003364</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="0">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>11.349678039550781</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="1">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.294851303100586</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="2">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.1701583862304688</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="3">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.1692047119140625</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="4">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.2137889862060547</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="5">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.2259483337402344</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="6">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.294851303100586</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="7">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.2731552124023438</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="8">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.1365413665771484</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="9">
+			<oml:name>wall_clock_time_millis_training</oml:name>
+			<oml:value>1.318216323852539</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="0">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.8559159999999011</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="1">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.4579580000001471</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="2">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.45920799999965567</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="3">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.449209000000117</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="4">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.452333000000138</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="5">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.4404999999998438</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="6">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.46437499999996135</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="7">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.43887499999950563</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="8">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.4358330000000521</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="9">
+			<oml:name>usercpu_time_millis_testing</oml:name>
+			<oml:value>0.4521660000005312</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="0">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>12.209581999999664</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="1">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.7550420000000955</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="2">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.6315409999991815</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="3">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.6198760000003531</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="4">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.6691660000001107</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="5">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.6667909999998898</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="6">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.761792000000817</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="7">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.7187089999994853</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="8">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.5728739999998353</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="9">
+			<oml:name>usercpu_time_millis</oml:name>
+			<oml:value>1.7695000000008676</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="0">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.8571147918701172</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="1">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.45943260192871094</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="2">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.4608631134033203</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="3">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.4506111145019531</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="4">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.45418739318847656</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="5">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.44226646423339844</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="6">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.46944618225097656</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="7">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.44035911560058594</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="8">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.4374980926513672</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="9">
+			<oml:name>wall_clock_time_millis_testing</oml:name>
+			<oml:value>0.45371055603027344</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="0">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>12.206792831420898</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="1">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.7542839050292969</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="2">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.631021499633789</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="3">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.6198158264160156</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="4">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.6679763793945312</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="5">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.6682147979736328</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="6">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.7642974853515625</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="7">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.7135143280029297</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="8">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.5740394592285156</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="9">
+			<oml:name>wall_clock_time_millis</oml:name>
+			<oml:value>1.7719268798828125</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="0">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>0.9333333333333333</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="1">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>1.0</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="2">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>1.0</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="3">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>0.9333333333333333</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="4">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>1.0</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="5">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>0.9333333333333333</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="6">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>1.0</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="7">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>0.8666666666666667</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="8">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>0.8666666666666667</oml:value>
+		</oml:evaluation>
+		<oml:evaluation repeat="0" fold="9">
+			<oml:name>predictive_accuracy</oml:name>
+			<oml:value>1.0</oml:value>
+		</oml:evaluation>
+	</oml:output_data>
+</oml:run>

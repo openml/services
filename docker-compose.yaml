@@ -1,9 +1,13 @@
 services:
+  x-php-image: &php-image
+    image: openml/php-rest-api:v1.3.2
+    env_file: config/php/.env
+
   database:
-    image: "mysql:8.4.3-oraclelinux9"
+    image: "mysql:9.5.0-oraclelinux9"
     container_name: "openml-database"
     environment:
-      MYSQL_ROOT_PASSWORD: ok
+      MYSQL_ROOT_PASSWORD: oXjUZUe7FfXKgsVe2plG
     ports:
       - "3306:3306"
     command: --innodb-buffer-pool-size=16G
@@ -31,7 +35,7 @@ services:
     volumes:
       - /data/openml-storage/openml/mysql:/var/lib/mysql
     healthcheck:
-      test: curl 127.0.0.1:9200/_cluster/health | grep -e "green"
+      test: curl -A "healthcheck" 127.0.0.1:9200/_cluster/health | grep -e "green"
       start_period: 30s
       start_interval: 5s
       timeout: 3s
@@ -42,8 +46,21 @@ services:
           cpus: '4'
           memory: 64G
 
+  elasticsearch-indexer:
+    profiles: ["all", "object-storage", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
+    <<: *php-image
+    container_name: "openml-elasticsearch-indexer"
+    environment:
+      ES_ENABLED: true
+      INDEX_ES: true
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      database-setup:
+        condition: service_completed_successfully
+
   nginx:
-    profiles: ["all", "minio", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
+    profiles: ["all", "client-ci", "object-storage", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     build:
       context: config/nginx
     volumes:
@@ -65,17 +82,15 @@ services:
       - /data/openml-storage/openml/certbot/conf/:/etc/letsencrypt/
 
   php-api:
-    image: openml/php-rest-api:v1.2.1
+    <<: *php-image
     container_name: "openml-php-rest-api"
     ports:
       - "8080:80"  # also known as /api (nginx)
-    env_file: config/php/.env
     depends_on:
       elasticsearch:
         condition: service_healthy
     volumes:
       - /data/openml-storage/openml/php:/var/www/data
-      - ./config/php/set_configuration.sh:/scripts/set_configuration.sh
     # Healthcheck (and multiple depends_on: php-api) disabled, so that it also spins up before the data is uploaded.
     #healthcheck:
       #test: curl 127.0.0.1:80/api/v1/json/data/1 | grep -e "data_set_description"
@@ -90,33 +105,37 @@ services:
           memory: 16G
 
   frontend:
-    image: openml/frontend:dev_v2.0.20251111
+    image: openml/frontend:v2.1.10
     container_name: "openml-frontend"
     ports:
       - "8081:5000"  # also known as / (nginx)
     env_file: config/frontend/.env
-    # depends_on:
-    #   php-api:
-    #     condition: service_healthy
 
-  minio:
-    image: quay.io/minio/minio
-    container_name: "openml-minio"
+  object-storage:
+    image: chrislusf/seaweedfs:4.48
+    container_name: "openml-object-storage"
     ports:
-      - "9000:9000"  # also known as /data (nginx)
-      - "9001:9001"
-    volumes:
-      - /data/openml-storage/openml/minio:/export
-    env_file: config/minio/.env
+      - "8333:8333"  # also known as /s3 (nginx)
+      - "8888:8888"
+    env_file: config/object-storage/.env
+
+  croissants:
+    profiles: ["all"]
+    image: "openml/croissant-converter:v1.5.0"
+    container_name: "openml-croissant-converter"
+    env_file: config/croissant-converter/.env
+    ports:
+      - "8001:8001"
     command: >
-      server /export --console-address ":9001"
-    deploy:
-      resources:
-        limits:
-          cpus: '4'
-          memory: 64G
+      web_api.py --host "0.0.0.0" --port 8001 --s3-server http://object-storage:8333/
 
 
 networks:
   default:
     name: openml-services
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+          ip_range: 172.28.1.0/24
+
