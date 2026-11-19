@@ -6,11 +6,10 @@ services:
   database:
     image: "mysql:9.5.0-oraclelinux9"
     container_name: "openml-database"
-    environment:
-      MYSQL_ROOT_PASSWORD: oXjUZUe7FfXKgsVe2plG
     ports:
       - "3306:3306"
     command: --innodb-buffer-pool-size=16G
+    env_file: config/database/.env
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       start_period: 30s
