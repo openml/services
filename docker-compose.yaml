@@ -6,6 +6,9 @@ services:
   database:
     image: "mysql:9.5.0-oraclelinux9"
     container_name: "openml-database"
+    volumes:
+      - /data/openml-storage/openml/mysql:/var/lib/mysql
+      - /data/openml-storage/db-input:/db-input
     ports:
       - "3306:3306"
     command: --innodb-buffer-pool-size=16G
@@ -45,21 +48,7 @@ services:
           cpus: '4'
           memory: 64G
 
-  elasticsearch-indexer:
-    profiles: ["all", "object-storage", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
-    <<: *php-image
-    container_name: "openml-elasticsearch-indexer"
-    environment:
-      ES_ENABLED: true
-      INDEX_ES: true
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-      database-setup:
-        condition: service_completed_successfully
-
   nginx:
-    profiles: ["all", "client-ci", "object-storage", "rest-api", "frontend", "elasticsearch", "evaluation-engine"]
     build:
       context: config/nginx
     volumes:
@@ -108,6 +97,8 @@ services:
     container_name: "openml-frontend"
     ports:
       - "8081:5000"  # also known as / (nginx)
+    volumes:
+      - /data/openml-storage/openml/seaweedfs:/data
     env_file: config/frontend/.env
 
   object-storage:
@@ -119,7 +110,6 @@ services:
     env_file: config/object-storage/.env
 
   croissants:
-    profiles: ["all"]
     image: "openml/croissant-converter:v1.5.0"
     container_name: "openml-croissant-converter"
     env_file: config/croissant-converter/.env
