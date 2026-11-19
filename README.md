@@ -1,8 +1,5 @@
-# Backend
-Overview of all OpenML components including a docker-compose to run OpenML services locally. 
-The Python-based REST API (or REST API version 2) is still experimental, the other services are used in production.
-
-Note: For the development of the Python-based REST API, a separate definition of services is currently maintained. These are in that repository, see the [Python REST API](https://docs.openml.org/apiv2/contributing/contributing/) documentation for more information.
+# Read Only Services
+This is the read-only deployment that can run instead of the OpenML production deployment.
 
 ## Overview
 
