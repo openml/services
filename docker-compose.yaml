@@ -1,6 +1,6 @@
 services:
   x-php-image: &php-image
-    image: openml/php-rest-api:v1.3.2
+    image: openml/php-rest-api:v1.3.3
     env_file: config/php/.env
 
   database:
